@@ -1,0 +1,42 @@
+{
+    "container": {
+        "width": 900,
+        "height": 900,
+        "backgroundColor":"rgb(53,54,58)"
+    },
+    "blocks": [
+        {
+            "style": {
+                "top": 100,
+                "left": 100,
+                "width":100,
+                "height":40,
+                "zIndex": 1
+            },
+            "type": "text",
+            "id": "1681268882249"
+        },
+        {
+            "style": {
+                "top": 150,
+                "left": 150,
+                "width":100,
+                "height":60,
+                "zIndex": 2
+            },
+            "type": "button",
+            "id": "1681268904730"
+        },
+        {
+            "style": {
+                "top": 200,
+                "left": 200,
+                "width":300,
+                "height":120,
+                "zIndex": 3
+            },
+            "type": "input",
+            "id": "1681268914998"
+        }
+    ]
+}
