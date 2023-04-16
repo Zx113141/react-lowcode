@@ -9,7 +9,10 @@ import Nav from "../nav"
 import { useDragMenus } from "@/examples/hooks/useDragMenus"
 import { useComponentMap } from "@/examples/hooks/useComponentMap"
 import { type Items } from "@/examples/components/menu"
-
+import { BlockProps } from "../blocks"
+import { type FocusMap } from "../editorContent"
+import { useBlockItem } from "@/examples/hooks/useBlockItem"
+import { ISchema } from '@formily/react'
 
 interface EditorProps {
     widgetList: Items[],
@@ -23,10 +26,11 @@ interface EditorContextProps {
 }
 
 interface DataProviderProps {
-    data: any,
-    dragStart?: (e:DragEvent, comp:any) => void,
-    dragEnd?: () => void,
-    widgetMap:any,
+    blocks: any[],
+    container: any
+    widgetMap: any,
+    blockItem?: BlockProps | {},
+    schema:ISchema 
 }
 
 const EditorContext = createContext<EditorContextProps>({
@@ -36,24 +40,36 @@ const EditorContext = createContext<EditorContextProps>({
 })
 
 export const DataProvider = createContext<DataProviderProps>({
-    data: {},
-    widgetMap:{},
+    blocks: [],
+    container: {},
+    widgetMap: {},
+    blockItem: {},
+    schema:{}
 })
 
-const TreeNode = createContext<any>({
-
-})
 
 const Editor = (props: EditorProps) => {
-    // var
+
+    // 外部传入数据源
+    const { widgetList, data } = props
+    // 所有blocks
+    const [blocks, setBlocks] = useState<any>(data.blocks || [])
+    // drag相关
     const [collapse, setCollapse] = useState<boolean>(false)
 
     const canvasRef = useRef() as React.MutableRefObject<any>
-    const [dragStart, dragEnd] = useDragMenus(canvasRef)
-    const { widgetList, data } = props
+    const [dragStart, dragEnd, dragItem] = useDragMenus(canvasRef,blocks,setBlocks)
+    // container 属性
+    const [container, setContainer] = useState<any>(data.container || {})
+    // 选中时候是否是多个焦点
+    const [isMulti, setIsMulti] = useState<boolean>(false)
+
     const [widgetMap] = useComponentMap(widgetList)
+    // 当前获取焦点元素及其schema配置
+    const [schema, blockItem] = useBlockItem(dragItem)
     // hooks
     useEffect(() => {
+
         // console.log(canvasRef)
     }, [])
     // 菜单拖拽
@@ -63,6 +79,15 @@ const Editor = (props: EditorProps) => {
         setCollapse(!collapse)
     }
     const handleClick = () => {
+
+    }
+
+    const exploreFocus = (focusMap: Map<string, FocusMap>, isMulti: boolean) => {
+        if (isMulti) {
+            setIsMulti(isMulti)
+        } else {
+            // const schema
+        }
 
     }
     return (
@@ -79,10 +104,10 @@ const Editor = (props: EditorProps) => {
                             <Nav handleClick={() => handleClick()} ></Nav>
 
                             <DataProvider.Provider value={{
-                                data,
-                                dragStart,
-                                dragEnd,
+                                blocks,
+                                container,
                                 widgetMap,
+                                schema,
                             }}>
                                 <ContainerPc>
                                     <DataProvider.Consumer>
@@ -90,8 +115,14 @@ const Editor = (props: EditorProps) => {
                                             (data) => (
                                                 <>
                                                     <Menu onCollapse={() => changeCollapse()} items={widgetList} dragStart={(e: DragEvent, comp: any) => dragStart(e, comp)}></Menu>
-                                                    <EditorContent {...data} {...editorConfig} widgetMap={widgetMap} ref={canvasRef} dragEnd={() => dragEnd()}></EditorContent>
-                                                    <ConfigurationsContent isGroup={false}></ConfigurationsContent>
+                                                    <EditorContent
+                                                        {...data}
+                                                        {...editorConfig}
+                                                        ref={canvasRef}
+                                                        dragEnd={() => dragEnd()}
+                                                        exploreFocus={(focusMap: Map<string, FocusMap>, isMulti: boolean) => exploreFocus(focusMap, isMulti)}
+                                                    ></EditorContent>
+                                                    <ConfigurationsContent schema={data.schema} isMulti={isMulti}></ConfigurationsContent>
                                                 </>
                                             )
                                         }

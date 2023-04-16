@@ -1,5 +1,11 @@
 import styles from './index.module.less'
-const ConfigurationsContent = () => {
+import { ISchema } from '@formily/react'
+interface ConfigurationProps {
+    isMulti:boolean,
+    schema:ISchema
+}
+
+const ConfigurationsContent = (props:ConfigurationProps) => {
 
 
     return (

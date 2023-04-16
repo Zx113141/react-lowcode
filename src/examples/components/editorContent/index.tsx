@@ -4,43 +4,54 @@ import DataProvider from '../editor/index'
 import Blocks, { type BlockProps } from '../blocks'
 import { useFocus } from '@/examples/hooks/useFocus'
 interface CanvasProps {
-    data: any,
+    container: any,
+    blocks:any[],
     // canvasRef: any
     dragEnd: () => void,
-    widgetMap: any
+    widgetMap: any,
+    exploreFocus: (focusInfo: Map<string, FocusMap>, isMulti: boolean) => void
 }
 
 export interface FocusMap {
     [key: string]: BlockProps
 }
 const EditorContent = forwardRef((props: CanvasProps, ref: any) => {
-    const { container, blocks } = props.data
-    const { dragEnd, widgetMap } = props
+    // 拖拽事件和组件映射
+    const { dragEnd, widgetMap, exploreFocus,container, blocks } = props
     // 创建focus映射
-    const [getFocus, clearFocus, focusInfo] = useFocus<any>(ref)
+    const [getFocus, clearFocus, focusInfo] = useFocus(ref)
 
     // 根据focus 进行组件移动
     let movingStart = {}
     const handleFocus = (e: MouseEvent, block: BlockProps) => {
         getFocus(e, block)
-        if (focusInfo.size > 0)
-            movingStart = {
-                startX: e.clientX,
-                startY: e.clientY,
-                // startPos: focusInfo?.map((it: any) => ({
-                //     left: it.style.left,
-                //     top: it.style.top
-                // }))
+        movingStart = {
+            startX: e.clientX,
+            startY: e.clientY,
         }
-        // console.log(focusInfo)
+        console.log(focusInfo)
         ref.current.addEventListener('mousemove', handleMove)
         ref.current.addEventListener('mouseup', revokeMove)
     }
+
     useEffect(() => {
+        if (focusInfo.size > 0) {
+            if (focusInfo.size > 1) {
+                exploreFocus(focusInfo, true)
+            } else {
+                exploreFocus(focusInfo, false)
+            }
+        }
 
-    },[focusInfo])
+    }, [focusInfo])
+
     const handleMove = (e: MouseEvent) => {
-
+        let positions = []
+        for (let item of focusInfo.values()) {
+            positions.push({
+                left: item.style
+            })
+        }
     }
     const revokeMove = (e: MouseEvent) => {
         ref.current.removeEventListener('mousemove', handleMove)

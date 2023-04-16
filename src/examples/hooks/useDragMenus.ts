@@ -1,6 +1,7 @@
+import React, { useState } from 'react'
 
-export const useDragMenus = (ref: any) => {
 
+export const useDragMenus = (ref: any,blockItem:any,fn:(blocks:any[]) => void) => {
     // 将修改后的数据同步给dragList
     let current: any = null
     const dragStart = (e: DragEvent, comp: any) => {
@@ -15,21 +16,23 @@ export const useDragMenus = (ref: any) => {
         e.preventDefault()
     }
     const dragDrop = (e: DragEvent,) => {
+        console.log(current)
         if (!current) return
-        const droppingItem = {
+        fn([...blockItem, {
             style: {
                 left: e.offsetX,
                 top: e.offsetY,
                 zIndex: 4,
                 // alignCenter:true
             },
-            type: current.type,
+            type: current.key,
             id: String(new Date().getTime())
-
-        }
-        // fn(droppingItem)
+        }])
+        
         current = null
         console.log('执行了')
+        // fn(droppingItem)
+
     }
     const dragLeave = (e: DragEvent) => {
         e.dataTransfer.dropEffect = 'none'
@@ -43,5 +46,5 @@ export const useDragMenus = (ref: any) => {
         ref.current?.removeEventListener('dragleave', dragLeave)
         ref.current?.removeEventListener('drop', dragDrop)
     }
-    return [ dragStart, dragEnd]
+    return [dragStart, dragEnd]
 }
