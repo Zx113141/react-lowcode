@@ -1,6 +1,8 @@
 .subs {
     display: grid;
-    grid-template-columns: 1fr 1fr 3fr;
+    grid-template-columns: 1fr 4fr;
+    height: 100%;
+    border-top: 1px solid rgb(24, 24, 28);
     > ul {
         padding: 0;
         margin: 0;
@@ -28,6 +30,30 @@
         cursor: pointer;
         background-color: rgba(255, 255, 255, 0.075);
         filter: Blur(Add=true, Direction=100, Strength=8)
+    }
+    &-comp {
+        padding: 10px;
+        background-color: rgb(24, 24, 28);
+        &-block {
+            width: 100%;
+            background-color: rgb(30, 30, 30);
+            cursor: move;
+            &-title {
+                text-align: right;
+                padding: 3px 10px;
+            }
+            &-icon {
+                width: 140px;
+                height: 100px;
+                margin: 0 auto;
+            }
+        }
+    }
+    &-child {
+
+        background-color: rgb(30, 30, 30);
+        display: grid;
+        grid-template-columns: 1fr 3fr;
     }
 }
 

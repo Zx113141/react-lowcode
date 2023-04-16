@@ -1,9 +1,9 @@
-
+import styles from './index.module.less'
 const ConfigurationsContent = () => {
 
 
     return (
-        <div>
+        <div className={styles.configure}>
             
         </div>
     )

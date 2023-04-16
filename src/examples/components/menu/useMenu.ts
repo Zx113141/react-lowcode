@@ -4,15 +4,17 @@ export interface useMenuProps {
     property: string,
     lists: ComponentsListProps[],
     icon: () => JSX.Element,
-    name: string
+    name: string,
+
 }
 
 interface ComponentsListProps {
     type: string
     key: string
-    preview: () => JSX.Element,
-    render: () => JSX.Element,
+    preview?: () => JSX.Element,
+    render?: () => JSX.Element,
     label: string
+    children:ComponentsListProps[]
 }
 
 export const useMenu = (params: useMenuProps[]) => {
@@ -25,7 +27,8 @@ export const useMenu = (params: useMenuProps[]) => {
                 title: item.label,
                 key: item.key,
                 parent: item.type,
-                render: item.render
+                render: item.render,
+                children:item.children
             })
         })
         subs.push({

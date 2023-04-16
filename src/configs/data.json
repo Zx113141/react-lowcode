@@ -1,8 +1,9 @@
 {
     "container": {
-        "width": 900,
-        "height": 900,
-        "backgroundColor":"rgb(53,54,58)"
+        "width": 1920,
+        "height": 1080,
+        "backgroundColor":"rgb(53,54,58)",
+        "--scale":0.5
     },
     "blocks": [
         {

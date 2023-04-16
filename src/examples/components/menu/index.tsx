@@ -2,7 +2,6 @@
 import React, { ReactDOM, createContext } from "react"
 import { Input } from "antd";
 import SubMenu from "./subMenu"
-import MenuItem from "./menuItem"
 import { useEffect } from 'react';
 import styles from './index.module.less'
 export interface MenuProps {
@@ -11,12 +10,14 @@ export interface MenuProps {
     style?: React.CSSProperties
     theme?: string,
     onCollapse?: () => void
+    dragStart?: (e:DragEvent, comp:any) => void
 }
 export interface Items {
     property: string,
     lists: ComponentsListProps[],
     icon: () => JSX.Element,
-    name: string
+    name: string,
+
 }
 export interface ComponentsListProps {
     type: string
@@ -24,6 +25,7 @@ export interface ComponentsListProps {
     preview: () => JSX.Element,
     render: () => JSX.Element,
     label: string
+    children:ComponentsListProps[]
 }
 
 export const MenuContext = createContext<MenuProps>({
@@ -60,8 +62,7 @@ const MenuProvider = (props: MenuProps) => {
                 <MenuContext.Consumer>
                     {
                         (ctx) => (
-                            <SubMenu items={ctx.items}>
-                                <MenuItem ></MenuItem>
+                            <SubMenu  {...ctx}>
                             </SubMenu>
                         )
                     }

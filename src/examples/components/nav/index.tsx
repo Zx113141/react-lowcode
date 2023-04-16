@@ -9,7 +9,7 @@ interface NavProps {
 
 
 const Nav = (props: NavProps) => {
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState (false);
     const [onEditTitle, setOnEditTitle] = useState(false)
     const langItems = [
         {
@@ -122,7 +122,7 @@ const Nav = (props: NavProps) => {
             resolve(1)
         })
     }
-    const handleHome = async (key) => {
+    const handleHome = async (key:string) => {
         setIsModalOpen(true)
     }
     const handleCancel = () => {
