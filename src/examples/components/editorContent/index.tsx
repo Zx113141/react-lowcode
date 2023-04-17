@@ -19,7 +19,7 @@ const EditorContent = forwardRef((props: CanvasProps, ref: any) => {
     // 拖拽事件和组件映射
     const { dragEnd, widgetMap, exploreFocus, container, blocks, setBlocks } = props
     // 创建focus映射
-    const [getFocus, clearFocus, focusInfo] = useFocus(ref)
+    const [getFocus, clearFocus, focusInfo] = useFocus()
 
     // 鼠标点击坐标
     const [movingStart, setMovingStart] = useState({

@@ -18,7 +18,7 @@ export interface SubMenu {
 }
 const SubMenu = (props: SubMenuProps) => {
     const {dragStart} = props
-    const [activeKey, setActiveKey] = useState<string[]>([])
+    const [activeKey, setActiveKey] = useState<any[]>([])
     const [activeList, setActiveList] = useState<any>([])
     const [activeSubs, setActiveSubs] = useState<any>([])
     const [list, menus] = useMenu(props.items)
@@ -55,7 +55,7 @@ const SubMenu = (props: SubMenuProps) => {
             <ul className={styles.subsChild}>
                 <div className={styles.subsChildMenu}>
                     {
-                        activeSubs.map(menu => (
+                        activeSubs.map((menu:any) => (
                             <li key={menu.key} className={classNames(styles.subMenu, menu.key === activeKey[1] ? styles.active : '')} onClick={(e: any) => onSubClick(e, menu.parent,menu.key)}>
                                 <div className={styles.name}>
                                     {menu.title}
@@ -66,7 +66,7 @@ const SubMenu = (props: SubMenuProps) => {
                 </div>
                 <div className={styles.subsComp}>
                     {
-                        activeList?.map(comp => {
+                        activeList?.map((comp:any) => {
                             return (
                                 <div className={styles.subsCompBlock} key={comp.key} draggable onDragStart={(e:DragEvent) => dragStart?dragStart(e, comp):null}>
                                     <div className={styles.subsCompBlockTitle}>

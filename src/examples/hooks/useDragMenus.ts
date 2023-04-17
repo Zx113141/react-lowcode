@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
+import { useFocus } from './useFocus'
 
-
-export const useDragMenus = (ref: any,blockItem:any,fn:(blocks:any[]) => void):
-[((e: DragEvent, comp: any) => void),() => void ] => {
+export const useDragMenus = (ref: any, blockItem: any, fn: (blocks: any[]) => void):
+    [((e: DragEvent, comp: any) => void), () => void] => {
     // 将修改后的数据同步给dragList
     let current: any = null
+    const [getFocus] = useFocus()
     const dragStart = (e: DragEvent, comp: any) => {
         current = comp
         ref.current?.addEventListener('dragenter', dragEnter)
@@ -30,13 +31,12 @@ export const useDragMenus = (ref: any,blockItem:any,fn:(blocks:any[]) => void):
             id: String(new Date().getTime()),
             ...current,
         }])
-        
         current = null
         console.log('执行了')
         // fn(droppingItem)
 
     }
-    const dragLeave = (e: DragEvent ) => {
+    const dragLeave = (e: DragEvent) => {
         e.dataTransfer.dropEffect = 'none'
     }
     const dragEnter = (e: DragEvent) => {

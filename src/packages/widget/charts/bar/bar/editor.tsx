@@ -1,8 +1,11 @@
 import Bar from ".";
+import { barPropertySchema } from './schema'
+
 
 export const bar = {
     name: '普通柱状图',
-    preview: () => <div><Bar></Bar></div>,
+    preview: () => <Bar></Bar>,
     render: Bar,
-    key: 'bar'
+    key: 'bar',
+    schema:barPropertySchema
 }

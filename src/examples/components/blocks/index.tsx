@@ -47,7 +47,7 @@ const Blocks = (props: BlocksProps) => {
                             style={{ ...block.style }}
                             onMouseDown={(e:MouseEvent) => handleFocus(e, block)}
                         >
-                            <Component data={block.data} action={block.action} ></Component>
+                            <Component data={block.data} action={block.action} {...block}></Component>
                         </div>
                     )
                 })

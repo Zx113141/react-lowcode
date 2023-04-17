@@ -84,6 +84,7 @@ const Editor = (props: EditorProps) => {
 
     const exploreFocus = (focusMap: Map<string, BlockProps>) => {
         getSchema(focusMap)
+        
     }
     return (
         <>

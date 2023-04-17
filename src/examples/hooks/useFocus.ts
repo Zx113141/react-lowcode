@@ -5,7 +5,7 @@ import  {type BlockProps} from '@/examples/components/blocks/index'
 // }
 
 
-export const useFocus = (ref:HTMLDivElement):[((e: MouseEvent, block: BlockProps) => void),() => void  , Map<string, BlockProps>] => {
+export const useFocus = ():[((e: MouseEvent, block: BlockProps) => void),() => void  , Map<string, BlockProps>] => {
 
     const [focusInfo, setFocusInfo] = useState<Map<string, BlockProps>>(new Map())
 
