@@ -20,9 +20,11 @@ const SubMenu = (props: SubMenuProps) => {
     const {dragStart} = props
     const [activeKey, setActiveKey] = useState<string[]>([])
     const [activeList, setActiveList] = useState<any>([])
+    const [activeSubs, setActiveSubs] = useState<any>([])
     const [list, menus] = useMenu(props.items)
     const onMenuClick = (e: any, key: string) => {
         const menu = menus.find(subMenu => subMenu.parent === key)
+        setActiveSubs(menus.filter(menu => menu.parent === key))
         setActiveKey([key, menu?.key])
     }
     const onSubClick = (e:any, parent:string,key:string) => {
@@ -53,7 +55,7 @@ const SubMenu = (props: SubMenuProps) => {
             <ul className={styles.subsChild}>
                 <div className={styles.subsChildMenu}>
                     {
-                        menus.map(menu => (
+                        activeSubs.map(menu => (
                             <li key={menu.key} className={classNames(styles.subMenu, menu.key === activeKey[1] ? styles.active : '')} onClick={(e: any) => onSubClick(e, menu.parent,menu.key)}>
                                 <div className={styles.name}>
                                     {menu.title}
