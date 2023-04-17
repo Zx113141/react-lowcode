@@ -1,4 +1,4 @@
-import Text from "./widget/text"
+import {text} from "./widget/text/editor"
 import React, { ReactElement } from "react"
 import XButton from "./widget/button"
 import XInput from "./widget/input"
@@ -14,10 +14,7 @@ export const componentsList = [
                 label: '文本',
                 children: [
                     {
-                        name: '普通文本',
-                        preview: () => <div>预览文本</div>,
-                        render: Text,
-                        key:'text'
+                       ...text
                     }
                 ]
             },

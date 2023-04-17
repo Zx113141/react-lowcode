@@ -1,6 +1,6 @@
 
 
-export const useBlockItem = (currentBlock:any) => {
+export const useBlockItem = () => {
 
     let schema = {}
     let blockItem = {}

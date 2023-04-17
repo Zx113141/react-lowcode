@@ -4,7 +4,7 @@ import {type FocusMap} from '../editorContent/index'
 // import Block from './block/block'
 interface BlocksProps {
     blocks: any[],
-    focusItem: Map<string, FocusMap>,
+    focusItem: Map<string, BlockProps>,
     widgetMap: WidgetMap,
     handleFocus: (e:MouseEvent,blcok:BlockProps) => void
 }

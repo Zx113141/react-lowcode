@@ -5,19 +5,19 @@ import Blocks, { type BlockProps } from '../blocks'
 import { useFocus } from '@/examples/hooks/useFocus'
 interface CanvasProps {
     container: any,
-    blocks:any[],
+    blocks: any[],
     // canvasRef: any
     dragEnd: () => void,
     widgetMap: any,
-    exploreFocus: (focusInfo: Map<string, FocusMap>, isMulti: boolean) => void
+    exploreFocus: (focusInfo: Map<string, BlockProps>) => void
 }
 
-export interface FocusMap {
-    [key: string]: BlockProps
-}
+// export interface FocusMap {
+//     [key: string]: BlockProps
+// }
 const EditorContent = forwardRef((props: CanvasProps, ref: any) => {
     // 拖拽事件和组件映射
-    const { dragEnd, widgetMap, exploreFocus,container, blocks } = props
+    const { dragEnd, widgetMap, exploreFocus, container, blocks } = props
     // 创建focus映射
     const [getFocus, clearFocus, focusInfo] = useFocus(ref)
 
@@ -29,18 +29,14 @@ const EditorContent = forwardRef((props: CanvasProps, ref: any) => {
             startX: e.clientX,
             startY: e.clientY,
         }
-        console.log(focusInfo)
         ref.current.addEventListener('mousemove', handleMove)
         ref.current.addEventListener('mouseup', revokeMove)
     }
 
     useEffect(() => {
+
         if (focusInfo.size > 0) {
-            if (focusInfo.size > 1) {
-                exploreFocus(focusInfo, true)
-            } else {
-                exploreFocus(focusInfo, false)
-            }
+            exploreFocus(focusInfo)
         }
 
     }, [focusInfo])

@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import  {type BlockProps} from '@/examples/components/blocks/index'
-interface FocusMap {
-    [key:string]:BlockProps
-}
+// interface FocusMap {
+//     [key:string]:BlockProps
+// }
 
 
-export const useFocus = (ref:HTMLDivElement) => {
+export const useFocus = (ref:HTMLDivElement):[((e: MouseEvent, block: BlockProps) => void),() => void  , Map<string, BlockProps>] => {
 
     const [focusInfo, setFocusInfo] = useState<Map<string, BlockProps>>(new Map())
 

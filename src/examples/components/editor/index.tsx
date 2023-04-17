@@ -5,14 +5,15 @@ import Menu from '@/examples/components/menu'
 import { useState, createContext } from 'react'
 import EditorContent from "../editorContent"
 import ConfigurationsContent from "../configuration"
-import Nav from "../nav"
+import Nav from "../../hooks/nav"
 import { useDragMenus } from "@/examples/hooks/useDragMenus"
 import { useComponentMap } from "@/examples/hooks/useComponentMap"
 import { type Items } from "@/examples/components/menu"
 import { BlockProps } from "../blocks"
-import { type FocusMap } from "../editorContent"
+// import { type FocusMap } from "../editorContent"
 import { useBlockItem } from "@/examples/hooks/useBlockItem"
 import { ISchema } from '@formily/react'
+import { useSchema } from "@/examples/hooks/useSchema"
 
 interface EditorProps {
     widgetList: Items[],
@@ -54,19 +55,18 @@ const Editor = (props: EditorProps) => {
     const { widgetList, data } = props
     // 所有blocks
     const [blocks, setBlocks] = useState<any>(data.blocks || [])
-    // drag相关
+    // 菜单相关
     const [collapse, setCollapse] = useState<boolean>(false)
 
     const canvasRef = useRef() as React.MutableRefObject<any>
-    const [dragStart, dragEnd, dragItem] = useDragMenus(canvasRef,blocks,setBlocks)
+    const [dragStart, dragEnd] = useDragMenus(canvasRef,blocks,setBlocks)
     // container 属性
     const [container, setContainer] = useState<any>(data.container || {})
-    // 选中时候是否是多个焦点
-    const [isMulti, setIsMulti] = useState<boolean>(false)
 
     const [widgetMap] = useComponentMap(widgetList)
     // 当前获取焦点元素及其schema配置
-    const [schema, blockItem] = useBlockItem(dragItem)
+    const [schema, getSchema] = useSchema()
+    // 根据选中元素获取schema文件
     // hooks
     useEffect(() => {
 
@@ -82,13 +82,8 @@ const Editor = (props: EditorProps) => {
 
     }
 
-    const exploreFocus = (focusMap: Map<string, FocusMap>, isMulti: boolean) => {
-        if (isMulti) {
-            setIsMulti(isMulti)
-        } else {
-            // const schema
-        }
-
+    const exploreFocus = (focusMap: Map<string, BlockProps>) => {
+        getSchema(focusMap)
     }
     return (
         <>
@@ -120,9 +115,9 @@ const Editor = (props: EditorProps) => {
                                                         {...editorConfig}
                                                         ref={canvasRef}
                                                         dragEnd={() => dragEnd()}
-                                                        exploreFocus={(focusMap: Map<string, FocusMap>, isMulti: boolean) => exploreFocus(focusMap, isMulti)}
+                                                        exploreFocus={(focusMap: Map<string, BlockProps>,) => exploreFocus(focusMap)}
                                                     ></EditorContent>
-                                                    <ConfigurationsContent schema={data.schema} isMulti={isMulti}></ConfigurationsContent>
+                                                    <ConfigurationsContent schema={data.schema} ></ConfigurationsContent>
                                                 </>
                                             )
                                         }
