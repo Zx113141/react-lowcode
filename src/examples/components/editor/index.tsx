@@ -115,6 +115,7 @@ const Editor = (props: EditorProps) => {
                                                         {...editorConfig}
                                                         ref={canvasRef}
                                                         dragEnd={() => dragEnd()}
+                                                        setBlocks={setBlocks}
                                                         exploreFocus={(focusMap: Map<string, BlockProps>,) => exploreFocus(focusMap)}
                                                     ></EditorContent>
                                                     <ConfigurationsContent schema={data.schema} ></ConfigurationsContent>

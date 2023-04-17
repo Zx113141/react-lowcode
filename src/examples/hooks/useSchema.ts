@@ -6,11 +6,14 @@ export const useSchema = (): [ISchema, (FocusMap: Map<string, BlockProps>) => vo
     const [schema, setSchema] = useState<ISchema>({})
     const getSchema = (focusMap: Map<string, BlockProps>) => {
 
-        if (focusMap.size > 1) {
-
+        if (focusMap.size > 0) {
+            if (focusMap.size > 1) {
+                setSchema({})
+            } else {
+                setSchema(focusMap.values().next().value.schema)
+            }
         } else {
-            console.log(focusMap.values().next().value)
-            setSchema(focusMap.values().next().value.schema)
+            setSchema({})
         }
 
     }
