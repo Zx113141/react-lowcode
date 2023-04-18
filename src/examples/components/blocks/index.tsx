@@ -1,12 +1,12 @@
 import styles from './index.module.less'
 import classNames from 'classnames'
-import {type FocusMap} from '../editorContent/index'
+import { type FocusMap } from '../editorContent/index'
 // import Block from './block/block'
 interface BlocksProps {
     blocks: any[],
     focusItem: Map<string, BlockProps>,
     widgetMap: WidgetMap,
-    handleFocus: (e:MouseEvent,blcok:BlockProps) => void
+    handleFocus: (e: MouseEvent, blcok: BlockProps) => void
 }
 
 interface WidgetMap {
@@ -30,25 +30,29 @@ export interface BlockProps {
 }
 
 const Blocks = (props: BlocksProps) => {
-    const { blocks, focusItem, widgetMap,handleFocus } = props
+    const { blocks, focusItem, widgetMap, handleFocus } = props
+    console.log('block渲染了')
     return (
         <>
             {
                 blocks.map((block: BlockProps) => {
                     const Component = widgetMap[block.type].render
                     return (
-                        <div key={block.id}
-                            className={classNames(
-                                styles.block, focusItem.has(block.id) ? 
-                                styles.blockFocus 
-                                : '', 
-                                block.foucus ? 
-                                styles.blockResize : '')}
-                            style={{ ...block.style }}
-                            onMouseDown={(e:MouseEvent) => handleFocus(e, block)}
-                        >
-                            <Component data={block.data} action={block.action} {...block}></Component>
-                        </div>
+                        <>
+                            <div key={block.id}
+                                className={classNames(
+                                    styles.block, focusItem.has(block.id) ?
+                                    styles.blockFocus
+                                    : ''
+                                )}
+                                style={{ ...block.style }}
+                                onMouseDown={(e: MouseEvent) => handleFocus(e, block)}
+                            >
+                                 <Component data={block.data} action={block.action} {...block} ></Component>
+
+                            </div>
+
+                        </>
                     )
                 })
             }

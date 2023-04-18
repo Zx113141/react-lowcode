@@ -42,8 +42,8 @@ const Menu = (props: any) => {
         </MenuContext.Provider>
     )
 }
-
-const MenuProvider = (props: MenuProps) => {
+const MenuProvider =React.memo((props: MenuProps) => {
+console.log('Menu 渲染了')
     return (
         <Menu {...props}>
             <div className={styles.menu}>
@@ -75,7 +75,7 @@ const MenuProvider = (props: MenuProps) => {
 
     )
 
-}
+})
 
 export default MenuProvider
 

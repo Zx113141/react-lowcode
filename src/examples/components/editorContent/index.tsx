@@ -37,11 +37,11 @@ const EditorContent = forwardRef((props: CanvasProps, ref: any) => {
     }
 
     useEffect(() => {
-
         if (focusInfo.size > 0) {
             exploreFocus(focusInfo)
             ref.current.addEventListener('mousemove', handleMove)
             ref.current.addEventListener('mouseup', revokeMove)
+            console.log('焦点')
         }
 
     }, [focusInfo])

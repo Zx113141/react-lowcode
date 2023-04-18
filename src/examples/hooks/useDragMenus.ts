@@ -17,20 +17,22 @@ export const useDragMenus = (ref: any, blockItem: any, fn: (blocks: any[]) => vo
         // e.dataTransfer.dropEffect = 'move'
         e.preventDefault()
     }
+    // 放置后要获取焦点
     const dragDrop = (e: DragEvent,) => {
         if (!current) return
-        fn([...blockItem, {
+        let block = {
             style: {
                 left: e.offsetX,
                 top: e.offsetY,
                 zIndex: 4,
                 // alignCenter:true
             },
-
             type: current.key,
             id: String(new Date().getTime()),
             ...current,
-        }])
+        }
+        fn([...blockItem, block])
+        getFocus(e, block)
         current = null
         console.log('执行了')
         // fn(droppingItem)

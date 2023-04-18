@@ -1,6 +1,6 @@
 
 import ContainerPc from "./container"
-import { useEffect, useRef } from "react"
+import { useCallback, useEffect, useMemo, useRef } from "react"
 import Menu from '@/examples/components/menu'
 import { useState, createContext } from 'react'
 import EditorContent from "../editorContent"
@@ -31,7 +31,7 @@ interface DataProviderProps {
     container: any
     widgetMap: any,
     blockItem?: BlockProps | {},
-    schema:ISchema 
+    schema: ISchema
 }
 
 const EditorContext = createContext<EditorContextProps>({
@@ -45,7 +45,7 @@ export const DataProvider = createContext<DataProviderProps>({
     container: {},
     widgetMap: {},
     blockItem: {},
-    schema:{}
+    schema: {}
 })
 
 
@@ -59,7 +59,8 @@ const Editor = (props: EditorProps) => {
     const [collapse, setCollapse] = useState<boolean>(false)
 
     const canvasRef = useRef() as React.MutableRefObject<any>
-    const [dragStart, dragEnd] = useDragMenus(canvasRef,blocks,setBlocks)
+    // todo抽出setBlocks
+    const [dragStart, dragEnd] =useDragMenus(canvasRef, blocks, setBlocks)
     // container 属性
     const [container, setContainer] = useState<any>(data.container || {})
 
@@ -75,17 +76,22 @@ const Editor = (props: EditorProps) => {
     // 菜单拖拽
 
     // functions
-    const changeCollapse = () => {
-        setCollapse(!collapse)
-    }
-    const handleClick = () => {
+    const changeCollapse = useCallback(() => {
+        return () => {
+            setCollapse(!collapse)
+        }
+    },[collapse])
+    const handleClick = useCallback(() => {
+        return () => {
 
-    }
+        }
+    },[])
 
     const exploreFocus = (focusMap: Map<string, BlockProps>) => {
         getSchema(focusMap)
-        
+
     }
+    console.log('Editor 渲染了')
     return (
         <>
             <EditorContext.Provider value={{
@@ -110,7 +116,12 @@ const Editor = (props: EditorProps) => {
                                         {
                                             (data) => (
                                                 <>
-                                                    <Menu onCollapse={() => changeCollapse()} items={widgetList} dragStart={(e: DragEvent, comp: any) => dragStart(e, comp)}></Menu>
+                                                    <Menu
+                                                        
+                                                        onCollapse={() => changeCollapse()}
+                                                        items={widgetList}
+                                                        dragStart={(e: DragEvent, comp: any) => dragStart(e, comp)}
+                                                    ></Menu>
                                                     <EditorContent
                                                         {...data}
                                                         {...editorConfig}

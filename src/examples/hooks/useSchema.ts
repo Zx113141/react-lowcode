@@ -11,7 +11,6 @@ export const useSchema = (): [ISchema, (FocusMap: Map<string, BlockProps>) => vo
                 setSchema({})
             } else {
                 setSchema(focusMap.values().next().value.schema)
-                console.log(focusMap.values().next().value.schema)
             }
         } else {
             setSchema({})

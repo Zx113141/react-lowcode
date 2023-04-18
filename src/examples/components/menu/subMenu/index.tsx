@@ -6,7 +6,7 @@ import { type Items } from '..'
 
 interface SubMenuProps {
     items: Items[]
-    dragStart: (e:DragEvent, comp:any) => void
+    dragStart: (e: DragEvent, comp: any) => void
 }
 export interface SubMenu {
     icon?: () => JSX.Element,
@@ -17,23 +17,34 @@ export interface SubMenu {
     render?: () => JSX.Element,
 }
 const SubMenu = (props: SubMenuProps) => {
-    const {dragStart} = props
+    const { dragStart } = props
+    // 激活菜单
     const [activeKey, setActiveKey] = useState<any[]>([])
+    // 组件页
     const [activeList, setActiveList] = useState<any>([])
+    // 子菜单
     const [activeSubs, setActiveSubs] = useState<any>([])
     const [list, menus] = useMenu(props.items)
     const onMenuClick = (e: any, key: string) => {
         const menu = menus.find(subMenu => subMenu.parent === key)
-        setActiveSubs(menus.filter(menu => menu.parent === key))
-        setActiveKey([key, menu?.key])
+        const block = menus.find(subMenu => subMenu.parent === key)
+        if (!activeKey.length || activeKey[0] !== key) {
+            setActiveSubs(menus.filter(menu => menu.parent === key))
+            setActiveKey([key, menu?.key])
+            setActiveList(block?.children)
+        }
+
     }
-    const onSubClick = (e:any, parent:string,key:string) => {
-        setActiveKey([parent,key])
+    const onSubClick = (e: any, parent: string, key: string) => {
+        if (activeKey[1] !== key) {
+            const block = menus.find(subMenu => subMenu.key === key && subMenu.parent === parent)
+            setActiveKey([parent, key])
+            setActiveList(block?.children)
+        }
     }
-    useEffect(() => {
-        const block = menus.find(block => block.key===activeKey[1] && block.parent === activeKey[0])
-        setActiveList(block?.children)
-    }, [activeKey])
+
+
+    console.log('SubMenu 渲染了')
     return (
         <div className={styles.subs}>
             <ul>
@@ -55,8 +66,8 @@ const SubMenu = (props: SubMenuProps) => {
             <ul className={styles.subsChild}>
                 <div className={styles.subsChildMenu}>
                     {
-                        activeSubs.map((menu:any) => (
-                            <li key={menu.key} className={classNames(styles.subMenu, menu.key === activeKey[1] ? styles.active : '')} onClick={(e: any) => onSubClick(e, menu.parent,menu.key)}>
+                        activeSubs.map((menu: any) => (
+                            <li key={menu.key} className={classNames(styles.subMenu, menu.key === activeKey[1] ? styles.active : '')} onClick={(e: any) => onSubClick(e, menu.parent, menu.key)}>
                                 <div className={styles.name}>
                                     {menu.title}
                                 </div>
@@ -66,9 +77,9 @@ const SubMenu = (props: SubMenuProps) => {
                 </div>
                 <div className={styles.subsComp}>
                     {
-                        activeList?.map((comp:any) => {
+                        activeList?.map((comp: any) => {
                             return (
-                                <div className={styles.subsCompBlock} key={comp.key} draggable onDragStart={(e:DragEvent) => dragStart?dragStart(e, comp):null}>
+                                <div className={styles.subsCompBlock} key={comp.key} draggable onDragStart={(e: DragEvent) => dragStart ? dragStart(e, comp) : null}>
                                     <div className={styles.subsCompBlockTitle}>
                                         {
                                             comp.name

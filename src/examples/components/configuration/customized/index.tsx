@@ -18,7 +18,7 @@ interface CusomizedProps {
 
 
 const Customized = ({ schema = {}, initialValue }: CusomizedProps) => {
-
+    console.log(schema)
     const SchemaField = useMemo(() => createSchemaField({
         components: {
             FormItem,
