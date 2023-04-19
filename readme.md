@@ -8,3 +8,5 @@
 ```
 
 ## 组件的属性修改编写
+
+### 引入mobx-react-lite 做全局状态管理 优化hooks泛滥问题，减少不必要rerender
