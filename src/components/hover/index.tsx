@@ -13,7 +13,7 @@ const Hover = (props) => {
         ctx.lineTo(position.x + style.width, position)
 
     }
-    console.log(style)
+    // console.log(style)
     return (
         <canvas ref={ref} width={style.width} height={style.height}></canvas>
     )

@@ -29,7 +29,7 @@ export const useMenuDrag = (ref: any,fn) => {
         }
         fn(droppingItem)
         current = null
-        console.log('执行了')
+        // console.log('执行了')
     }
     const dragLeave = (e: DragEvent) => {
         e.dataTransfer.dropEffect = 'none'

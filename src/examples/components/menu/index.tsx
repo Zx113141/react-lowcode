@@ -43,7 +43,7 @@ const Menu = (props: any) => {
     )
 }
 const MenuProvider =React.memo((props: MenuProps) => {
-console.log('Menu 渲染了')
+
     return (
         <Menu {...props}>
             <div className={styles.menu}>

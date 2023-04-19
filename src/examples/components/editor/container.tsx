@@ -7,7 +7,7 @@ interface EditorProps {
 
 const ContainerPc = (props: EditorProps) => {
     const { children } = props
-    console.log('ContainerPc 渲染了')
+    // console.log('ContainerPc 渲染了')
     return (
         <div className={styles.container}>
             {

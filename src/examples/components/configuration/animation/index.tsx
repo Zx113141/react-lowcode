@@ -1,6 +1,8 @@
+interface AnimationsProps {
+    animation:any
+}
 
-
-const Animations = () => {
+const Animations = (props:any) => {
 
 
     return (

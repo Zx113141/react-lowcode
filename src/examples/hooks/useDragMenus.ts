@@ -1,18 +1,19 @@
-import React, { useState } from 'react'
-import { useFocus } from './useFocus'
+import React, { useState, useCallback } from 'react'
+import { BlockProps } from '../components/blocks'
 
-export const useDragMenus = (ref: any, blockItem: any, fn: (blocks: any[]) => void):
-    [((e: DragEvent, comp: any) => void), () => void] => {
+export const useDragMenus = (ref: any):
+    [((e: DragEvent, comp: any) => void), () => void, BlockProps | any] => {
     // 将修改后的数据同步给dragList
+    const [block, setBlock] = useState<BlockProps | {}>({})
+
     let current: any = null
-    const [getFocus] = useFocus()
-    const dragStart = (e: DragEvent, comp: any) => {
+    const dragStart = useCallback((e: DragEvent, comp: any) => {
         current = comp
         ref.current?.addEventListener('dragenter', dragEnter)
         ref.current?.addEventListener('dragover', dragOver)
         ref.current?.addEventListener('dragleave', dragLeave)
         ref.current?.addEventListener('drop', dragDrop)
-    }
+    }, [ref])
     const dragOver = (e: DragEvent) => {
         // e.dataTransfer.dropEffect = 'move'
         e.preventDefault()
@@ -20,7 +21,7 @@ export const useDragMenus = (ref: any, blockItem: any, fn: (blocks: any[]) => vo
     // 放置后要获取焦点
     const dragDrop = (e: DragEvent,) => {
         if (!current) return
-        let block = {
+        setBlock({
             style: {
                 left: e.offsetX,
                 top: e.offsetY,
@@ -30,13 +31,8 @@ export const useDragMenus = (ref: any, blockItem: any, fn: (blocks: any[]) => vo
             type: current.key,
             id: String(new Date().getTime()),
             ...current,
-        }
-        fn([...blockItem, block])
-        getFocus(e, block)
+        })
         current = null
-        console.log('执行了')
-        // fn(droppingItem)
-
     }
     const dragLeave = (e: DragEvent) => {
         e.dataTransfer.dropEffect = 'none'
@@ -50,5 +46,5 @@ export const useDragMenus = (ref: any, blockItem: any, fn: (blocks: any[]) => vo
         ref.current?.removeEventListener('dragleave', dragLeave)
         ref.current?.removeEventListener('drop', dragDrop)
     }
-    return [dragStart, dragEnd]
+    return [dragStart, dragEnd, block]
 }

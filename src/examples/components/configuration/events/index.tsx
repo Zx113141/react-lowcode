@@ -1,6 +1,9 @@
+interface EventsProps {
+    events:any
+}
 
 
-const Events = () => {
+const Events = (props:any) => {
 
 
     return (

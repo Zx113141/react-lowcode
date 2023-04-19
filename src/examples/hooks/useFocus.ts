@@ -1,15 +1,12 @@
-import React, { useState } from "react";
+import React, { useState ,useCallback} from "react";
 import  {type BlockProps} from '@/examples/components/blocks/index'
-// interface FocusMap {
-//     [key:string]:BlockProps
-// }
 
-
-export const useFocus = ():[((e: MouseEvent, block: BlockProps) => void),() => void  , Map<string, BlockProps>] => {
+export const useFocus = ():
+[((e: React.MouseEvent<HTMLDivElement>, block: BlockProps) => void),() => void  , Map<string, BlockProps>,(block: BlockProps, isMultiple?: boolean) => void] => {
 
     const [focusInfo, setFocusInfo] = useState<Map<string, BlockProps>>(new Map())
 
-    const getFocus = (e: MouseEvent, block: BlockProps) => {
+    const getFocus = (e: React.MouseEvent<HTMLDivElement>, block: BlockProps) => {
         e.preventDefault()
         e.stopPropagation()
         if (e.ctrlKey) {
@@ -32,6 +29,7 @@ export const useFocus = ():[((e: MouseEvent, block: BlockProps) => void),() => v
             focus.clear()
             focus.set(block.id, block)
         }
+        console.log('焦点获取成功')
         setFocusInfo(focus)
     }
     const clearFocus = () => {
@@ -41,5 +39,5 @@ export const useFocus = ():[((e: MouseEvent, block: BlockProps) => void),() => v
     }
 
 
-    return [getFocus, clearFocus, focusInfo]
+    return [getFocus, clearFocus, focusInfo,handleFocusMap]
 }

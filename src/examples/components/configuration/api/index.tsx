@@ -1,6 +1,8 @@
+interface DataApisProps {
+    action:any
+}
 
-
-const DataApis = () => {
+const DataApis = (props:any) => {
 
 
     return (

@@ -10,11 +10,8 @@ import { useDragMenus } from "@/examples/hooks/useDragMenus"
 import { useComponentMap } from "@/examples/hooks/useComponentMap"
 import { type Items } from "@/examples/components/menu"
 import { BlockProps } from "../blocks"
-// import { type FocusMap } from "../editorContent"
 import { useBlockItem } from "@/examples/hooks/useBlockItem"
-import { ISchema } from '@formily/react'
-import { useSchema } from "@/examples/hooks/useSchema"
-
+import { useFocus } from '@/examples/hooks/useFocus'
 interface EditorProps {
     widgetList: Items[],
     data: any
@@ -27,11 +24,14 @@ interface EditorContextProps {
 }
 
 interface DataProviderProps {
-    blocks: any[],
-    container: any
     widgetMap: any,
-    blockItem?: BlockProps | {},
-    schema: ISchema
+    focus: {
+        focusInfo: Map<string, BlockProps>,
+        getFocus: (e: React.MouseEvent<HTMLDivElement>, block: BlockProps) => void,
+        clearFocus: () => void,
+        handleFocusMap: (block: BlockProps, isMultiple?: boolean) => void
+    }
+    block?: BlockProps
 }
 
 const EditorContext = createContext<EditorContextProps>({
@@ -41,11 +41,13 @@ const EditorContext = createContext<EditorContextProps>({
 })
 
 export const DataProvider = createContext<DataProviderProps>({
-    blocks: [],
-    container: {},
     widgetMap: {},
-    blockItem: {},
-    schema: {}
+    focus: {
+        focusInfo: new Map(),
+        getFocus: (e: React.MouseEvent<HTMLDivElement>, block: BlockProps) => { },
+        clearFocus: () => { },
+        handleFocusMap:(block: BlockProps, isMultiple?: boolean) => {}
+    }
 })
 
 
@@ -53,84 +55,78 @@ const Editor = (props: EditorProps) => {
 
     // 外部传入数据源
     const { widgetList, data } = props
-    // 所有blocks
-    const [blocks, setBlocks] = useState<any>(data.blocks || [])
+
     // 菜单相关
     const [collapse, setCollapse] = useState<boolean>(false)
 
     const canvasRef = useRef() as React.MutableRefObject<any>
-    // todo抽出setBlocks
-    const [dragStart, dragEnd] =useDragMenus(canvasRef, blocks, setBlocks)
-    // container 属性
-    const [container, setContainer] = useState<any>(data.container || {})
-
+    // 负责菜单拖拽 和 放置事件
+    const [dragStart, dragEnd, block] = useDragMenus(canvasRef)
+    // 获取选中foucusMap
+    const [getFocus, clearFocus, focusInfo, handleFocusMap] = useFocus()
+    // 
     const [widgetMap] = useComponentMap(widgetList)
-    // 当前获取焦点元素及其schema配置
-    const [schema, getSchema] = useSchema()
     // 根据选中元素获取schema文件
     // hooks
+    // const [] = useBlockItem(focus)
     useEffect(() => {
-
-        // console.log(canvasRef)
-    }, [])
+    
+    }, [focus])
     // 菜单拖拽
 
     // functions
     const changeCollapse = useCallback(() => {
-        return () => {
-            setCollapse(!collapse)
-        }
-    },[collapse])
+        setCollapse(!collapse)
+    }, [collapse])
     const handleClick = useCallback(() => {
         return () => {
 
         }
-    },[])
-
-    const exploreFocus = (focusMap: Map<string, BlockProps>) => {
-        getSchema(focusMap)
-
+    }, [])
+    // 暴露focusInfo map
+    const getFocusInfo = (focusInfo: Map<string, BlockProps>) => {
+        // setFocusMap(focusInfo)
     }
-    console.log('Editor 渲染了')
     return (
         <>
             <EditorContext.Provider value={{
                 configs: {},
                 theme: 'dark',
                 language: 'zh_cn',
-
             }}>
                 <EditorContext.Consumer>
                     {
-                        (editorConfig) => (<>
+                        (editorConfigCtx) => (<>
                             <Nav handleClick={() => handleClick()} ></Nav>
 
                             <DataProvider.Provider value={{
-                                blocks,
-                                container,
                                 widgetMap,
-                                schema,
+                                focus: {
+                                    focusInfo,
+                                    clearFocus,
+                                    getFocus,
+                                    handleFocusMap
+                                },
+                                block,
                             }}>
                                 <ContainerPc>
                                     <DataProvider.Consumer>
                                         {
-                                            (data) => (
+                                            (mapsCtx) => (
                                                 <>
                                                     <Menu
-                                                        
                                                         onCollapse={() => changeCollapse()}
                                                         items={widgetList}
                                                         dragStart={(e: DragEvent, comp: any) => dragStart(e, comp)}
                                                     ></Menu>
                                                     <EditorContent
-                                                        {...data}
-                                                        {...editorConfig}
+                                                        clearFocus={clearFocus}
+                                                        data={data}
+                                                        {...editorConfigCtx}
                                                         ref={canvasRef}
                                                         dragEnd={() => dragEnd()}
-                                                        setBlocks={setBlocks}
-                                                        exploreFocus={(focusMap: Map<string, BlockProps>,) => exploreFocus(focusMap)}
                                                     ></EditorContent>
-                                                    <ConfigurationsContent schema={data.schema} ></ConfigurationsContent>
+                                                    <ConfigurationsContent focusInfo={mapsCtx.focus.focusInfo} ></ConfigurationsContent>
                                                 </>
                                             )
                                         }

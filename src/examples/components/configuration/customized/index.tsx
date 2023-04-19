@@ -1,6 +1,6 @@
 import styles from './index.module.less'
 import { ISchema } from '@formily/react'
-import React, { useMemo, useState } from 'react'
+import React, { useMemo, useState, useContext } from 'react'
 import {
     FormLayout,
     FormItem,
@@ -10,15 +10,14 @@ import {
 import { createForm } from '@formily/core'
 import { FormProvider, createSchemaField } from '@formily/react'
 import { Radio, Empty } from 'antd'
-
-interface CusomizedProps {
-    schema?: ISchema,
-    initialValue?: any
-}
+import { BlockProps } from '../../blocks'
+import { DataProvider } from '../../editor'
+import { useSchema } from '@/examples/hooks/useSchema'
 
 
-const Customized = ({ schema = {}, initialValue }: CusomizedProps) => {
-    console.log(schema)
+const Customized = () => {
+    const focus = useContext(DataProvider).focus.focusInfo
+    const [schema] = useSchema(focus)
     const SchemaField = useMemo(() => createSchemaField({
         components: {
             FormItem,
@@ -26,14 +25,12 @@ const Customized = ({ schema = {}, initialValue }: CusomizedProps) => {
             Input,
         },
     }), [schema])
-    const form = useMemo(() => createForm(), [schema])
+    const form = useMemo(() => createForm(), [])
     const formCollapse = FormCollapse.createFormCollapse()
-
-
     return (
         <>
             {
-                !schema ? <Empty ></Empty> :
+                JSON.stringify(schema) == '{}' ? <Empty ></Empty> :
                     <FormProvider form={form}>
                         <FormLayout labelCol={6} wrapperCol={10}>
                             <SchemaField schema={schema} scope={{ formCollapse }} />

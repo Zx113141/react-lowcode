@@ -131,7 +131,7 @@ const Nav = (props: NavProps) => {
 
     const handleOk = async () => {
         const isClose = await beforClose()
-        console.log(isClose)
+        // console.log(isClose)
         setIsModalOpen(false)
     }
     return (

@@ -6,7 +6,7 @@ import { type Items } from '..'
 
 interface SubMenuProps {
     items: Items[]
-    dragStart: (e: DragEvent, comp: any) => void
+    dragStart: (e: React.DragEventHandler<HTMLDivElement>, comp: any) => void
 }
 export interface SubMenu {
     icon?: () => JSX.Element,
@@ -17,6 +17,7 @@ export interface SubMenu {
     render?: () => JSX.Element,
 }
 const SubMenu = (props: SubMenuProps) => {
+    console.log('Menu 渲染了')
     const { dragStart } = props
     // 激活菜单
     const [activeKey, setActiveKey] = useState<any[]>([])
@@ -44,7 +45,7 @@ const SubMenu = (props: SubMenuProps) => {
     }
 
 
-    console.log('SubMenu 渲染了')
+    // console.log('SubMenu 渲染了')
     return (
         <div className={styles.subs}>
             <ul>
@@ -79,7 +80,7 @@ const SubMenu = (props: SubMenuProps) => {
                     {
                         activeList?.map((comp: any) => {
                             return (
-                                <div className={styles.subsCompBlock} key={comp.key} draggable onDragStart={(e: DragEvent) => dragStart ? dragStart(e, comp) : null}>
+                                <div className={styles.subsCompBlock} key={comp.key} draggable onDragStart={(e: React.DragEventHandler<HTMLDivElement>) => dragStart(e, comp) }>
                                     <div className={styles.subsCompBlockTitle}>
                                         {
                                             comp.name

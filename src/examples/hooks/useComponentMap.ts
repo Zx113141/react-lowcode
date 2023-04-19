@@ -2,7 +2,9 @@ import { useMenu } from "../components/menu/useMenu"
 
 export const useComponentMap = (componentList:any[], ) => {
     const widgetMap:any = {}
+
     const [,items] = useMenu(componentList)
+ 
     items.forEach((item) => {
         if (item.children) {
             item.children.forEach(child => {
@@ -10,6 +12,5 @@ export const useComponentMap = (componentList:any[], ) => {
             })
         }
     })
-
     return [widgetMap]
 }

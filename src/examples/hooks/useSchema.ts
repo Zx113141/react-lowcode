@@ -2,22 +2,17 @@ import { ISchema } from "@formily/react"
 import { type BlockProps } from "../components/blocks";
 import { useState } from "react";
 
-export const useSchema = (): [ISchema, (FocusMap: Map<string, BlockProps>) => void] => {
-    const [schema, setSchema] = useState<ISchema>({})
-    const getSchema = (focusMap: Map<string, BlockProps>) => {
-
-        if (focusMap.size > 0) {
-            if (focusMap.size > 1) {
-                setSchema({})
-            } else {
-                setSchema(focusMap.values().next().value.schema)
-            }
+export const useSchema = (focus: Map<string, BlockProps>): [ISchema] => {
+    let schema: ISchema = {}
+    if (focus.size > 0) {
+        if (focus.size > 1) {
+            schema = {}
         } else {
-            setSchema({})
+            schema = (focus.values().next().value.schema)
         }
-
+    } else {
+        schema = {}
     }
 
-
-    return [schema, getSchema]
+    return [schema]
 }
