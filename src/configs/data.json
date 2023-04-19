@@ -2,16 +2,16 @@
     "container": {
         "width": 1920,
         "height": 1080,
-        "backgroundColor":"rgb(53,54,58)",
-        "--scale":0.5
+        "backgroundColor": "rgb(53,54,58)",
+        "--scale": 0.5
     },
     "blocks": [
         {
             "style": {
                 "top": 100,
                 "left": 100,
-                "width":100,
-                "height":40,
+                "width": 100,
+                "height": 40,
                 "zIndex": 1
             },
             "type": "text",
@@ -21,8 +21,8 @@
             "style": {
                 "top": 150,
                 "left": 150,
-                "width":100,
-                "height":60,
+                "width": 100,
+                "height": 60,
                 "zIndex": 2
             },
             "type": "button",
@@ -32,12 +32,74 @@
             "style": {
                 "top": 200,
                 "left": 200,
-                "width":300,
-                "height":120,
+                "width": 300,
+                "height": 120,
                 "zIndex": 3
             },
             "type": "input",
-            "id": "1681268914998"
+            "id": "1681268914998",
+            "schema": {
+                "type": "object",
+                "properties": {
+                   "collapse": {
+                      "type": "void",
+                      "x-decorator": "FormItem",
+                      "x-component": "FormCollapse",
+                      "x-component-props": {
+                         "formCollapse": "{{formCollapse}}",
+                         "expandIconPosition":"end",
+                          "extra":"{{genExtra}}"
+                      },
+                      "properties": {
+                         "panel1": {
+                            "type": "void",
+                            "x-component": "FormCollapse.CollapsePanel",
+                            "x-component-props": {
+                               "header": "A1"
+                            },
+                            "properties": {
+                               "aaa": {
+                                  "type": "string",
+                                  "title": "AAA",
+                                  "x-decorator": "FormItem",
+                                  "x-component": "ColorPick"
+                               }
+                            }
+                         },
+                         "panel2": {
+                            "type": "void",
+                            "x-component": "FormCollapse.CollapsePanel",
+                            "x-component-props": {
+                               "header": "A2"
+                            },
+                            "properties": {
+                               "bbb": {
+                                  "type": "string",
+                                  "title": "BBB",
+                                  "x-decorator": "FormItem",
+                                  "x-component": "Input"
+                               }
+                            }
+                         },
+                         "panel3": {
+                            "type": "void",
+                            "x-component": "FormCollapse.CollapsePanel",
+                            "x-component-props": {
+                               "header": "A3"
+                            },
+                            "properties": {
+                               "ccc": {
+                                  "type": "string",
+                                  "title": "CCC",
+                                  "x-decorator": "FormItem",
+                                  "x-component": "Input"
+                               }
+                            }
+                         }
+                      }
+                   }
+                }
+             }
         }
     ]
 }

@@ -5,7 +5,6 @@ export const useDragMenus = (ref: any):
     [((e: DragEvent, comp: any) => void), () => void, BlockProps | any] => {
     // 将修改后的数据同步给dragList
     const [block, setBlock] = useState<BlockProps | {}>({})
-
     let current: any = null
     const dragStart = useCallback((e: DragEvent, comp: any) => {
         current = comp
@@ -40,11 +39,11 @@ export const useDragMenus = (ref: any):
     const dragEnter = (e: DragEvent) => {
         e.dataTransfer.dropEffect = 'move'
     }
-    const dragEnd = () => {
+    const dragEnd = useCallback(() => {
         ref.current?.removeEventListener('dragenter', dragEnter)
         ref.current?.removeEventListener('dragover', dragOver)
         ref.current?.removeEventListener('dragleave', dragLeave)
         ref.current?.removeEventListener('drop', dragDrop)
-    }
+    },[ref])
     return [dragStart, dragEnd, block]
 }
