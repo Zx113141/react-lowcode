@@ -18,17 +18,18 @@
         flex-direction: column;
         justify-content: center;
     }
-    li:hover {
-        cursor: pointer;
-        background-color: rgba(255, 255, 255, 0.075);
-        filter: Blur(Add=true, Direction=100, Strength=8)
-    }
+    //  {
+    //     cursor: pointer;
+    //     border: 1px solid var(--ant-primary-color);
+    //     background-color: var(--ant-primary-color);
+    //     filter: Blur(Add=true, Direction=100, Strength=8)
+    // }
     &-menu {
         background-color: rgb(30, 30, 30);
     }
-    &-menu:hover {
+    &-menu:hover ,li:hover{
         cursor: pointer;
-        background-color: rgba(255, 255, 255, 0.075);
+        background-color: var(--ant-primary-color);
         filter: Blur(Add=true, Direction=100, Strength=8)
     }
     &-comp {
@@ -58,6 +59,6 @@
 }
 
 .active {
-    background-color: rgba(148, 193, 239, 0.3);
+    background-color: var(--ant-primary-color);
     filter: Blur(Add=true, Direction=100, Strength=8)
 }

@@ -9,8 +9,9 @@ import {
     FormCollapse,
     Switch
 } from '@formily/antd'
-import { createForm } from '@formily/core'
-import { FormProvider, createSchemaField } from '@formily/react'
+import { createForm ,onFormValuesChange } from '@formily/core'
+import { FormProvider, createSchemaField, } from '@formily/react'
+import { Field,Form } from '@formily/core';
 import { Radio, Empty } from 'antd'
 import { DataProvider } from '../../editor'
 import { useSchema } from '@/examples/hooks/useSchema'
@@ -28,25 +29,34 @@ const Customized = () => {
             ColorPick
         },
     }), [schema])
-    const form = useMemo(() => createForm(), [])
+    const form = useMemo(() => createForm({
+        initialValues:{
+            
+        },
+        effects() {
+            onFormValuesChange ((form: Form) => {
+              console.log( JSON.stringify(form.values))
+            })
+          },
+    }), [])
     const formCollapse = FormCollapse.createFormCollapse()
     const genExtra = () => (
         <SettingOutlined
-          onClick={event => {
-            // If you don't want click extra trigger collapse, you can prevent this:
-            event.stopPropagation();
-          }}
+            onClick={event => {
+                // If you don't want click extra trigger collapse, you can prevent this:
+                event.stopPropagation();
+            }}
         />
-      );
+    );
     return (
         <>
             {
                 JSON.stringify(schema) == '{}' ? <Empty ></Empty> :
-                    <FormProvider form={form}>
-                        <FormLayout labelCol={6} wrapperCol={10}>
-                            <SchemaField schema={schema} scope={{ formCollapse,genExtra}} />
-                        </FormLayout>
-                    </FormProvider>
+                <FormProvider form={form}>
+                <FormLayout labelCol={6} wrapperCol={10}>
+                    <SchemaField schema={schema} scope={{ formCollapse, genExtra }} />
+                </FormLayout>
+            </FormProvider>
             }
         </>
 

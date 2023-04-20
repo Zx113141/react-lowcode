@@ -3,7 +3,7 @@ const XButton = () => {
 
 
     return (
-       <Button>按钮</Button>
+       <Button type="primary">按钮</Button>
     )
 }
 

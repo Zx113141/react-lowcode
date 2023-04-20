@@ -17,12 +17,23 @@ interface EditorProps {
     data: any
 }
 
-interface EditorContextProps {
-    theme?: string,
+export interface EditorContextProps {
+    theme?: 'dark' | 'light',
     language?: string,
-    configs: any
+    configs: Configs,
+    setColors:React.Dispatch<React.SetStateAction<Color | null>>
 }
+interface Configs {
+    colors: Color | null,
 
+}
+export interface Color {
+    title: string,
+    rgb: string,
+    hexColor: string,
+    pinyin: string,
+    key: string
+}
 interface DataProviderProps {
     widgetMap: any,
     focus: {
@@ -34,10 +45,13 @@ interface DataProviderProps {
     block?: BlockProps
 }
 
-const EditorContext = createContext<EditorContextProps>({
-    configs: {},
+export const EditorContext = createContext<EditorContextProps>({
+    configs: {
+        colors:null
+    },
     theme: 'dark',
     language: 'zh_cn',
+    setColors:() => {}
 })
 
 export const DataProvider = createContext<DataProviderProps>({
@@ -46,7 +60,7 @@ export const DataProvider = createContext<DataProviderProps>({
         focusInfo: new Map(),
         getFocus: (e: React.MouseEvent<HTMLDivElement>, block: BlockProps) => { },
         clearFocus: () => { },
-        handleFocusMap:(block: BlockProps, isMultiple?: boolean) => {}
+        handleFocusMap: (block: BlockProps, isMultiple?: boolean) => { }
     }
 })
 
@@ -66,12 +80,24 @@ const Editor = (props: EditorProps) => {
     const [getFocus, clearFocus, focusInfo, handleFocusMap] = useFocus()
     // 
     const [widgetMap] = useComponentMap(widgetList)
+    // 全局颜色配置
+    const [colors, setColors] = useState<Color | null>({
+        title:'碧空绿',
+        hexColor:'#51d6a9',
+        rgb:'rgb(81, 214, 169)',
+        pinyin:'BI KONG LV',
+        key:'BIKONGLV'
+    })
     // 根据选中元素获取schema文件
     // hooks
     // const [] = useBlockItem(focus)
     useEffect(() => {
-    
-    }, [focus])
+        // console.dir(canvasRef.current)
+        document.body.style.setProperty('--ant-primary-color', colors?.hexColor || null)
+        document.body.style.setProperty('--ant-primary-color-active', colors?.hexColor || null)
+        document.body.style.setProperty('--ant-primary-color-hover', colors?.hexColor || null)
+        document.body.style.setProperty('--ant-primary-color-outline', colors?.hexColor || null)
+    }, [colors])
     // 菜单拖拽
 
     // functions
@@ -80,7 +106,7 @@ const Editor = (props: EditorProps) => {
     }, [collapse])
     const handleClick = useCallback(() => {
         return () => {
-
+            // do something...
         }
     }, [])
     // 暴露focusInfo map
@@ -90,14 +116,17 @@ const Editor = (props: EditorProps) => {
     return (
         <>
             <EditorContext.Provider value={{
-                configs: {},
+                configs: {
+                    colors
+                },
                 theme: 'dark',
                 language: 'zh_cn',
+                setColors,
             }}>
                 <EditorContext.Consumer>
                     {
                         (editorConfigCtx) => (<>
-                            <Nav handleClick={() => handleClick()} ></Nav>
+                            <Nav handleClick={() => handleClick()}></Nav>
 
                             <DataProvider.Provider value={{
                                 widgetMap,

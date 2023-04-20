@@ -26,8 +26,14 @@ export const useFocus = ():
                 focus.set(block.id, block)
             }
         } else {
-            focus.clear()
-            focus.set(block.id, block)
+            if (focus.has(block.id)) {
+                return
+            } else {
+                focus.clear()
+                focus.set(block.id, block)
+            }
+     
+     
         }
         console.log('焦点获取成功')
         setFocusInfo(focus)

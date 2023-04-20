@@ -1,0 +1,39 @@
+.colors {
+    width: calc(100% - 300px);
+    display: flex;
+    justify-content: space-evenly;
+    &-box {
+        width: 300px;
+        cursor: pointer;
+        display: flex;
+        box-sizing: border-box;
+        padding: 10px 10px;
+        height: 80px;
+        &-color {
+            width: 10px;
+            height: 45px;
+            margin-right: 10px;
+        }
+        &-info {
+            display: flex;
+            flex-direction: column;
+            &-name {
+                display: flex;
+                > p {
+                    margin-right: 15px;
+                }
+            }
+            &-value {
+                display: flex;
+                > span {
+                    margin-right: 15px;
+                }
+            }
+           
+        }
+       
+    }
+    &-box:hover {
+        border: 1px #ccc solid;
+    }
+}

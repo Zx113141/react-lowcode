@@ -1,145 +1,62 @@
 
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import styles from './index.module.less'
 import classNames from 'classnames'
 import { Popover, Modal, Input, Dropdown, Button } from 'antd'
+import Colors from './components/colors';
+import { EditorContext, EditorContextProps } from '@/examples/components/editor';
+import { langItems, rolesLeft, rolesRight, type Roles, } from '@/configs/buttons';
+
 interface NavProps {
     handleClick: () => void
 }
 
-
 const Nav = (props: NavProps) => {
-    const [isModalOpen, setIsModalOpen] = useState (false);
+
+    const [isModalOpen, setIsModalOpen] = useState(false)
+    const [title, setTitle] = useState('01')
     const [onEditTitle, setOnEditTitle] = useState(false)
-    const langItems = [
-        {
-            key: '1',
-            label: (
-                <p>
-                    中文
-                </p>
-            ),
-        },
-        {
-            key: '2',
-            label: (
-                <p>
-                    English
-                </p>
-            ),
-        },
-    ]
-    const rolesLeft = [
-        {
-            key: 'home',
-            name: '主页',
-            info: '返回主页',
-            execute: (key: string) => handleHome(key)
-        },
-        {
-            key: 'chart',
-            name: '图表',
-            info: '图表组件',
-            execute: (key: string) => function (key: string) { }
-        },
-        {
-            key: 'layout',
-            name: '图层',
-            info: '图层控制',
-            execute: (key: string) => function (key: string) { }
-        },
-        {
-            key: 'options',
-            name: '配置',
-            info: '配置设置',
-            execute: (key: string) => function (key: string) { }
-        },
-        {
-            key: 'setting',
-            name: '基本设置',
-            info: '设置',
-            execute: (key: string) => function (key: string) { }
-        },
-        {
-            key: 'null',
-            name: '|',
-            execute: (key: string) => function (key: string) { }
-        },
-        {
-            key: 'left',
-            name: '<',
-            info: '前进',
-            execute: (key: string) => function (key: string) { }
-        },
-        {
-            key: 'right',
-            name: '>',
-            info: '撤回',
-            execute: (key: string) => function (key: string) { }
-        },
-    ]
-
-    const rolesRight = [
-        {
-            key: 'preview',
-            name: '预览',
-            execute: (key: string) => handleHome(key)
-        },
-        {
-            key: 'release',
-            name: '发布',
-            execute: (key: string) => handleHome(key)
-        },
-        {
-            key: 'lang',
-            name: <Dropdown menu={{ items: langItems }} placement="bottomLeft">
-                <Button size='small'>Text</Button>
-            </Dropdown>,
-            execute: (key: string) => handleHome(key)
-        },
-
-        {
-            key: 'theme',
-            name: '颜色',
-            execute: (key: string) => handleHome(key)
-        },
-        {
-            key: 'colors',
-            name: '颜色',
-            execute: (key: string) => handleHome(key)
-        },
-        {
-            key: 'avatar',
-            name: <img width='30px' height='100%'></img>,
-            execute: (key: string) => handleHome(key)
-        },
-    ]
-
-
-    const beforClose = async () => {
-
-        return new Promise((resolve, reject) => {
-            resolve(1)
-        })
-    }
-    const handleHome = async (key:string) => {
-        setIsModalOpen(true)
-    }
+    const { theme, configs, language } = useContext<EditorContextProps>(EditorContext)
+    console.log('nav 渲染了', theme, configs, language)
     const handleCancel = () => {
         setIsModalOpen(false)
     }
 
     const handleOk = async () => {
-        const isClose = await beforClose()
-        // console.log(isClose)
         setIsModalOpen(false)
+    }
+
+    const handleOnRolesRight = (role: Roles) => {
+        switch (role.key) {
+            case 'preview':
+                // role.execute(role.key)(setIsModalOpen)
+                break;
+            case 'release':
+                // role.execute(role.key)(setIsModalOpen)
+                break;
+            case 'lang':
+                // role.execute(role.key)(setIsModalOpen)
+                break;
+            case 'theme':
+                // const 
+                
+                // role.execute(role.key)(setIsModalOpen)
+                break;
+            case 'colors':
+                const execute = role.execute as (key: string) => (params: any) => void
+                execute(role.key)(setIsModalOpen)
+                break;
+            case 'avatar':
+                // role.execute(role.key)(setIsModalOpen)
+                break;
+        }
     }
     return (
         <div className={styles.head}>
             {/* 项目基础操作 */}
             <div className={classNames(styles.headItem, styles.headLeft)}>
                 {
-                    rolesLeft.map(role => (
+                    rolesLeft.map((role: Roles) => (
                         role.info ?
                             <div key={role.key}
                                 className={classNames(styles.headItemRoles, styles.headItemRolesLeft)}
@@ -159,25 +76,51 @@ const Nav = (props: NavProps) => {
                     工作空间-
                 </span>
                 {
-                    onEditTitle ? <Input defaultValue={'01'} onBlur={() => setOnEditTitle(!onEditTitle)} style={{ width: 200 }}></Input> : <span onClick={() => setOnEditTitle(!onEditTitle)}>01</span>
+                    onEditTitle ? <Input defaultValue={title} onInput={(e: React.FormEvent<HTMLInputElement>) => setTitle(e.target.value)} onBlur={() => setOnEditTitle(!onEditTitle)} style={{ width: 200 }}></Input> : <span onClick={() => { setOnEditTitle(!onEditTitle) }}>{title}</span>
                 }
             </div>
 
             {/* 个人及全局配置 */}
             <div className={classNames(styles.headItem, styles.headRight)}>
                 {
-                    rolesRight.map(role => (
+                    rolesRight.map((role: Roles) => (
                         <div key={role.key}
                             className={classNames(styles.headItemRoles, styles.headItemRolesLeft)}
-                            onClick={() => role.execute(role.key)}>
+                            onClick={() => handleOnRolesRight(role)}>
                             {role.name}
 
                         </div>
                     ))
                 }
             </div>
-            <Modal title="确认离开吗？" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
-                <p>请保存当前页面</p>
+            <Modal title="主题颜色选择"
+                centered
+                open={isModalOpen}
+                onCancel={handleCancel}
+                keyboard
+                footer={[]}
+                width={1850}
+            >
+                <div className={styles.color}>
+                    <Colors></Colors>
+                    <div className={styles.colorCurrent}>
+                        <div className={styles.colorCurrentName}>
+                            <p>
+                                {configs.colors?.title}
+                            </p>
+                            <p className={styles.colorCurrentNamePinyin}>
+                                {configs.colors?.pinyin}
+                            </p>
+                            <div style={{ width: 60, margin: '0 auto', height: 20, backgroundColor: configs.colors?.hexColor }}>
+
+                            </div>
+                        </div>
+                        <div className={styles.colorCurrentValue}>
+                            占位
+                        </div>
+                    </div>
+
+                </div>
             </Modal>
         </div>
     )

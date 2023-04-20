@@ -55,8 +55,6 @@ const ConfigurationsContent = (props: ConfigurationProps) => {
                     items={checkLists}
                 />
             </div>
-            <div className={styles.configureForm}>
-            </div>
         </div>
     )
 }

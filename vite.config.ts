@@ -20,6 +20,7 @@ export default defineConfig({
       less:{
         charset:false,
         javascriptEnabled: true,
+        additionalData: '@import "./src/assets/default/style.less";',
       }
     }
   }
