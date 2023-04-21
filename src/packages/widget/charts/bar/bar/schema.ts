@@ -23,17 +23,18 @@ export const barPropertySchema = {
               type: 'string',
               title: '标题内容',
               'x-decorator': 'FormItem',
-              required: true,
               'x-component': 'Input',
               'x-component-props': {
                 size: 'mini',
+                showCount: true,
+                maxLength: 20
               }
             },
             textStyle: {
               type: 'string',
               title: '标题样式',
               'x-decorator': 'FormItem',
-              required: true,
+
               'x-component': 'ColorPick',
               'x-component-props': {
                 size: 'mini',
@@ -43,17 +44,17 @@ export const barPropertySchema = {
               type: 'string',
               title: '标题位置',
               'x-decorator': 'FormItem',
-              required: true,
+
               'x-component': 'Input',
               'x-component-props': {
                 size: 'mini',
               }
             },
-            textBorder:{
+            textBorder: {
               type: 'string',
               title: '标题边框',
               'x-decorator': 'FormItem',
-              required: true,
+
               'x-component': 'Input',
               'x-component-props': {
                 size: 'mini',
@@ -73,7 +74,7 @@ export const barPropertySchema = {
               type: 'string',
               title: 'BBB',
               'x-decorator': 'FormItem',
-              required: true,
+
               'x-component': 'Input',
               'x-component-props': {
                 size: 'small',
@@ -92,7 +93,7 @@ export const barPropertySchema = {
               type: 'string',
               title: 'CCC',
               'x-decorator': 'FormItem',
-              required: true,
+
               'x-component': 'Input',
             },
           },

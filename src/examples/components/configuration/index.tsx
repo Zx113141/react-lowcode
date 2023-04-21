@@ -6,7 +6,7 @@ import Events from './events'
 import { useState, createContext, useMemo, useEffect } from 'react'
 import { Radio, Tabs } from 'antd'
 import { ISchema } from '@formily/react'
-import { BlockProps } from '@/examples/Provider/Blocks'
+import {type BlockProps } from '@/examples/Provider/Engine'
 
 
 const ConfigurationsContent = () => {

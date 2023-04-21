@@ -23,7 +23,7 @@ import {
 import { LabelLayout, UniversalTransition } from 'echarts/features';
 import { CanvasRenderer } from 'echarts/renderers';
 import { useEffect } from 'react';
-import { BlockProps } from '@/examples/components/blocks';
+import { type BlockProps } from '@/examples/Provider/Engine';
 
 // 通过 ComposeOption 来组合出一个只有必须组件和图表的 Option 类型
 type ECOption = echarts.ComposeOption<
@@ -78,6 +78,7 @@ const Bar = (props: BlockProps) => {
         }
 
     }, [])
+    console.log(props)
     return (
 
         <div style={{ width: 600, height: 500 }} id={id}>

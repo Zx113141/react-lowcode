@@ -1,5 +1,5 @@
 import { ISchema } from "@formily/react"
-import { BlockProps } from "../Provider/Blocks";
+import {type BlockProps } from "../Provider/Engine";
 import { useState } from "react";
 
 export const useSchema = (focus: Map<string, BlockProps>): [ISchema] => {

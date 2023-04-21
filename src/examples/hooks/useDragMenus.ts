@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react'
-import { BlockProps } from '../Provider/Engine'
+import {type BlockProps } from '../Provider/Engine'
 
 export const useDragMenus = (ref: any):
     [((e: DragEvent, comp: any) => void), () => void, BlockProps | any] => {

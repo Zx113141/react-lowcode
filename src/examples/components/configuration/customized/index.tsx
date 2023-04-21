@@ -36,7 +36,7 @@ const Customized = () => {
         },
         effects() {
             onFormValuesChange((form: Form) => {
-                console.log(JSON.stringify(form.values))
+                console.log(form.values)
             })
         },
     }), [])

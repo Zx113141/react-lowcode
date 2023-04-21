@@ -21,7 +21,8 @@ export interface BlockProps {
     focus?: boolean,
     schema?: any,
     animation?: any,
-    events?: any
+    events?: any,
+    property?:any
 }
 
 
@@ -40,7 +41,9 @@ export interface Engine {
     focus: Focus,
     dragger: Drag,
     setFocusInfo:(focusInfo:Map<string, BlockProps>) => void
-    setDraggerBlock:(block:BlockProps) => void
+    setDraggerBlock:(block:BlockProps) => void,
+    setBlockProper:(proper:any) => void,
+    propers:any | null
 }
 
 interface EngineCanvas {
@@ -59,20 +62,26 @@ export const EngineContext = createContext<Engine>({
         onDragEnd: () => { },
         block: {}
     },
+    propers:null,
     setFocusInfo: () => { },
-    setDraggerBlock: () => {}
+    setDraggerBlock: () => {},
+    setBlockProper: () => {},
 })
 
 
 const EngineProvider = (props: EngineCanvas) => {
     const [dragStart, dragEnd, block] = useDragMenus(props.canvasRef)
     const [getFocus, clearFocus, focusInfo, handleFocusMap] = useFocus()
+
     useEffect(() => {
         EngineStore.setFocusInfo(focusInfo)
     }, [focusInfo])
     useEffect(() => {
         EngineStore.setDraggerBlock(block)
     }, [block])
+    // useEffect(() => {
+    //     EngineStore.setDraggerBlock(block?.proper)
+    // },[block])
     const EngineStore = useLocalObservable((): Engine => {
         return {
             focus: {
@@ -86,11 +95,19 @@ const EngineProvider = (props: EngineCanvas) => {
                 onDragEnd: dragEnd,
                 block,
             },
+            propers:{
+
+            },
             setFocusInfo: (focusInfo: Map<string, BlockProps>) => {
                 EngineStore.focus.focusInfo = focusInfo
             },
             setDraggerBlock: (block:BlockProps) => {
                 EngineStore.dragger.block = block
+            },
+            setBlockProper: (proper:any) => {
+                for (let key in proper) {
+                    EngineStore.propers[key] = proper[key]
+                }
             }
         }
     })

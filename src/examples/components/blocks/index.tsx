@@ -28,7 +28,6 @@ const Blocks = (props: BlocksProps) => {
             handleFocusMap(block as BlockProps)
             setBlocks([...blocks, block])
         }
-        console.log(block)
     }, [block])
     // 根据focus 进行组件移动
     const handleFocus = (e: React.MouseEvent<HTMLDivElement>, block: BlockProps) => {
