@@ -1,5 +1,5 @@
 import React, { useState ,useCallback} from "react";
-import  {type BlockProps} from '@/examples/components/blocks/index'
+import { BlockProps } from "../Provider/Engine";
 
 export const useFocus = ():
 [((e: React.MouseEvent<HTMLDivElement>, block: BlockProps) => void),() => void  , Map<string, BlockProps>,(block: BlockProps, isMultiple?: boolean) => void] => {

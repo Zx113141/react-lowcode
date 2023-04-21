@@ -2,38 +2,33 @@ import React, { useState, useEffect, useContext } from 'react'
 import styles from './index.module.less'
 import classNames from 'classnames'
 // import Block from './block/block'
-import { DataProvider } from '../editor/index';
+import { DataContext, DataProviderProps } from '@/examples/Provider/Blocks';
+import { BlockProps, EngineContext, Engine } from '@/examples/Provider/Engine';
+import { observer } from 'mobx-react-lite';
 interface BlocksProps {
     data: any,
     parentRef: React.MutableRefObject<any>,
     scale: number
 }
-export interface BlockProps {
-    type: string,
-    id: string,
-    style: React.CSSProperties,
-    action?: any,
-    data?: any,
-    focus?: boolean,
-    schema?: any,
-    animation?: any,
-    events?: any
-}
+
 
 const Blocks = (props: BlocksProps) => {
     const { data, parentRef: ref, scale } = props
-    const { widgetMap, focus, block } = useContext(DataProvider)
+    const { focus, dragger } = useContext<Engine>(EngineContext)
+    const { widgetMap } = useContext<DataProviderProps>(DataContext)
+    const { block } = dragger
     const { getFocus, focusInfo, handleFocusMap } = focus
     // 所有blocks
     const [blocks, setBlocks] = useState<any>(data.blocks || [])
     // 鼠标点击坐标
     const [movingStart, setMovingStart] = useState<any>(null)
+
     useEffect(() => {
         if (block && JSON.stringify(block) !== '{}') {
-
-            handleFocusMap(block)
+            handleFocusMap(block as BlockProps)
             setBlocks([...blocks, block])
         }
+        console.log(block)
     }, [block])
     // 根据focus 进行组件移动
     const handleFocus = (e: React.MouseEvent<HTMLDivElement>, block: BlockProps) => {
@@ -51,7 +46,7 @@ const Blocks = (props: BlocksProps) => {
             ref.current.addEventListener('mouseup', revokeMove)
         }
 
-    }, [focusInfo,movingStart])
+    }, [focusInfo, movingStart])
 
     const handleMove = (e: MouseEvent) => {
         let positions: BlockProps[] = []
@@ -111,4 +106,4 @@ const Blocks = (props: BlocksProps) => {
     )
 }
 
-export default Blocks
+export default observer(Blocks)

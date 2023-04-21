@@ -1,14 +1,13 @@
 import { Card } from "antd"
 import React,{useContext} from "react";
 import { colors } from "@/configs/colors"
-import { Color } from '../../../components/editor/index';
+import { Color } from '@/examples/Provider/Editor';
 import styles from './color.module.less'
-import { EditorContextProps,EditorContext } from "../../../components/editor/index";
-
+import { EditConfigContext } from '@/examples/Provider/Editor';
+import { EditorContextProps } from '@/examples/Provider/Editor';
 const Colors = () => {
     
-    const {setColors,configs} = useContext<EditorContextProps>(EditorContext)
-    
+    const {setColors,configs} = useContext<EditorContextProps>(EditConfigContext)
     const setConfigsColor = (color:Color) => {
         if (configs.colors?.key === color.key) {
             return

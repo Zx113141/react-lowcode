@@ -6,15 +6,11 @@ import Events from './events'
 import { useState, createContext, useMemo, useEffect } from 'react'
 import { Radio, Tabs } from 'antd'
 import { ISchema } from '@formily/react'
-import { BlockProps } from '../blocks/index';
-interface ConfigurationProps {
-    focusInfo?: Map<string, BlockProps>
+import { BlockProps } from '@/examples/Provider/Blocks'
 
-}
 
-const ConfigurationsContent = (props: ConfigurationProps) => {
+const ConfigurationsContent = () => {
 
-    const { focusInfo } = props
     // const [Comp, setComp] = useState<JSX.Element>(<Customized schema={schema} initialValue={style}></Customized>)
     const checkLists = useMemo(() => (
         [

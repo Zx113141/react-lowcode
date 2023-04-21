@@ -1,12 +1,12 @@
-import React, { ReactNode, useEffect, useState } from "react"
+import React, { ReactNode, useContext, useState } from "react"
 import styles from './index.module.less'
 import classNames from 'classnames';
 import { useMenu } from "../useMenu";
 import { type Items } from '..'
+import { EngineContext,Engine } from "@/examples/Provider/Engine";
 
 interface SubMenuProps {
     items: Items[]
-    dragStart: (e: React.DragEventHandler<HTMLDivElement>, comp: any) => void
 }
 export interface SubMenu {
     icon?: () => JSX.Element,
@@ -17,8 +17,10 @@ export interface SubMenu {
     render?: () => JSX.Element,
 }
 const SubMenu = (props: SubMenuProps) => {
-    console.log('Menu 渲染了')
-    const { dragStart } = props
+    // 拖拽上下文
+    console.log('SubMenu rerender')
+    const {dragger} = useContext<Engine>(EngineContext)
+
     // 激活菜单
     const [activeKey, setActiveKey] = useState<any[]>([])
     // 组件页
@@ -80,7 +82,7 @@ const SubMenu = (props: SubMenuProps) => {
                     {
                         activeList?.map((comp: any) => {
                             return (
-                                <div className={styles.subsCompBlock} key={comp.key} draggable onDragStart={(e: React.DragEventHandler<HTMLDivElement>) => dragStart(e, comp) }>
+                                <div className={styles.subsCompBlock} key={comp.key} draggable onDragStart={(e: React.DragEventHandler<HTMLDivElement>) => dragger.onDragStart(e, comp) }>
                                     <div className={styles.subsCompBlockTitle}>
                                         {
                                             comp.name

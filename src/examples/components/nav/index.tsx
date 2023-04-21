@@ -1,23 +1,27 @@
 
-import React, { useContext, useState } from 'react'
+import React, { useContext, useState,useEffect } from 'react'
 import styles from './index.module.less'
 import classNames from 'classnames'
 import { Popover, Modal, Input, Dropdown, Button } from 'antd'
 import Colors from './components/colors';
-import { EditorContext, EditorContextProps } from '@/examples/components/editor';
+import { observer,Observer } from "mobx-react-lite"
 import { langItems, rolesLeft, rolesRight, type Roles, } from '@/configs/buttons';
+import { EditConfigContext } from '@/examples/Provider/Editor';
+import { EditorContextProps } from '@/examples/Provider/Editor';
 
-interface NavProps {
-    handleClick: () => void
-}
-
-const Nav = (props: NavProps) => {
+const Nav = () => {
 
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [title, setTitle] = useState('01')
     const [onEditTitle, setOnEditTitle] = useState(false)
-    const { theme, configs, language } = useContext<EditorContextProps>(EditorContext)
-    console.log('nav 渲染了', theme, configs, language)
+    const {configs, theme, language} = useContext<EditorContextProps>(EditConfigContext)
+    console.log('nav 渲染了')
+    useEffect(() => {
+        document.body.style.setProperty('--ant-primary-color', configs.colors?.hexColor || null)
+        document.body.style.setProperty('--ant-primary-color-active', configs.colors?.hexColor || null)
+        document.body.style.setProperty('--ant-primary-color-hover', configs.colors?.hexColor || null)
+        document.body.style.setProperty('--ant-primary-color-outline', configs.colors?.hexColor || null)
+    }, [configs.colors])
     const handleCancel = () => {
         setIsModalOpen(false)
     }
@@ -126,4 +130,4 @@ const Nav = (props: NavProps) => {
     )
 }
 
-export default React.memo(Nav)
+export default observer(Nav)

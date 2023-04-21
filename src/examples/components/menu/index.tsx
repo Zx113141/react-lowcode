@@ -1,8 +1,7 @@
 
-import React, { ReactDOM, createContext } from "react"
+import React, { createContext } from "react"
 import { Input } from "antd";
 import SubMenu from "./subMenu"
-import { useEffect } from 'react';
 import styles from './index.module.less'
 export interface MenuProps {
     isCollapse?: boolean
@@ -10,7 +9,7 @@ export interface MenuProps {
     style?: React.CSSProperties
     theme?: string,
     onCollapse?: () => void
-    dragStart?: (e:DragEvent, comp:any) => void
+    dragStart?: (e: DragEvent, comp: any) => void
 }
 export interface Items {
     property: string,
@@ -25,7 +24,7 @@ export interface ComponentsListProps {
     preview: () => JSX.Element,
     render: () => JSX.Element,
     label: string
-    children:ComponentsListProps[]
+    children: ComponentsListProps[]
 }
 
 export const MenuContext = createContext<MenuProps>({
@@ -33,45 +32,27 @@ export const MenuContext = createContext<MenuProps>({
     onCollapse: () => { },
     style: {},
     theme: 'dark',
-    items:[]
+    items: []
 })
-const Menu = (props: any) => {
-    return (
-        <MenuContext.Provider value={{ ...props }}>
-            {props.children}
-        </MenuContext.Provider>
-    )
-}
-const MenuProvider =React.memo((props: MenuProps) => {
+const MenuProvider = React.memo((props: MenuProps) => {
 
     return (
-        <Menu {...props}>
-            <div className={styles.menu}>
-                <div className={styles.menuSearch} >
-                    <div style={{ textAlign: 'left', paddingLeft: 12 }}>
-                        组件
-                    </div>
-                    <div style={{ display: 'flex' }}>
-                        <Input size="small" style={{ width: 100 }}></Input>
-                        <span>
-
-                            doSomething
-                        </span>
-                    </div>
+        <div className={styles.menu}>
+            <div className={styles.menuSearch} >
+                <div style={{ textAlign: 'left', paddingLeft: 12 }}>
+                    组件
                 </div>
-                <MenuContext.Consumer>
-                    {
-                        (ctx) => (
-                            <SubMenu  {...ctx}>
-                            </SubMenu>
-                        )
-                    }
-                </MenuContext.Consumer>
+                <div style={{ display: 'flex' }}>
+                    <Input size="small" style={{ width: 100 }}></Input>
+                    <span>
 
+                        doSomething
+                    </span>
+                </div>
             </div>
-
-
-        </Menu>
+            <SubMenu  {...props}>
+            </SubMenu>
+        </div>
 
     )
 

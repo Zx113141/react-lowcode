@@ -2,6 +2,7 @@
 import { SettingOutlined } from '@ant-design/icons';
 import ColorPick from '../CustomForm/color';
 import React, { useMemo, useState, useContext } from 'react'
+import { observer } from 'mobx-react-lite';
 import {
     FormLayout,
     FormItem,
@@ -9,16 +10,16 @@ import {
     FormCollapse,
     Switch
 } from '@formily/antd'
-import { createForm ,onFormValuesChange } from '@formily/core'
+import { createForm, onFormValuesChange } from '@formily/core'
 import { FormProvider, createSchemaField, } from '@formily/react'
-import { Field,Form } from '@formily/core';
-import { Radio, Empty } from 'antd'
-import { DataProvider } from '../../editor'
+import { Form } from '@formily/core';
+import { Empty } from 'antd'
+import { EngineContext, Engine } from '@/examples/Provider/Engine';
 import { useSchema } from '@/examples/hooks/useSchema'
 
 
 const Customized = () => {
-    const focus = useContext(DataProvider).focus.focusInfo
+    const focus = useContext<Engine>(EngineContext).focus.focusInfo
     const [schema] = useSchema(focus)
     const SchemaField = useMemo(() => createSchemaField({
         components: {
@@ -30,14 +31,14 @@ const Customized = () => {
         },
     }), [schema])
     const form = useMemo(() => createForm({
-        initialValues:{
-            
+        initialValues: {
+
         },
         effects() {
-            onFormValuesChange ((form: Form) => {
-              console.log( JSON.stringify(form.values))
+            onFormValuesChange((form: Form) => {
+                console.log(JSON.stringify(form.values))
             })
-          },
+        },
     }), [])
     const formCollapse = FormCollapse.createFormCollapse()
     const genExtra = () => (
@@ -52,15 +53,15 @@ const Customized = () => {
         <>
             {
                 JSON.stringify(schema) == '{}' ? <Empty ></Empty> :
-                <FormProvider form={form}>
-                <FormLayout labelCol={6} wrapperCol={10}>
-                    <SchemaField schema={schema} scope={{ formCollapse, genExtra }} />
-                </FormLayout>
-            </FormProvider>
+                    <FormProvider form={form}>
+                        <FormLayout labelCol={6} wrapperCol={10}>
+                            <SchemaField schema={schema} scope={{ formCollapse, genExtra }} />
+                        </FormLayout>
+                    </FormProvider>
             }
         </>
 
     )
 }
 
-export default Customized
+export default observer(Customized)

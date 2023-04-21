@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react'
-import { BlockProps } from '../components/blocks'
+import { BlockProps } from '../Provider/Engine'
 
 export const useDragMenus = (ref: any):
     [((e: DragEvent, comp: any) => void), () => void, BlockProps | any] => {
@@ -31,6 +31,7 @@ export const useDragMenus = (ref: any):
             id: String(new Date().getTime()),
             ...current,
         })
+
         current = null
     }
     const dragLeave = (e: DragEvent) => {

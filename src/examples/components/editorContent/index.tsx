@@ -1,17 +1,18 @@
-import { useEffect, useState, forwardRef, useMemo } from 'react'
+import { useEffect, useState, forwardRef, useContext } from 'react'
 import styles from './index.module.less'
 import DataProvider from '../editor/index'
-import Blocks, { type BlockProps } from '../blocks'
+import Blocks from '../blocks'
+import { Engine, EngineContext } from '@/examples/Provider/Engine'
 interface CanvasProps {
     data: any,
-    dragEnd: () => void,
-    clearFocus: () => void
 }
 
 
 const EditorContent = forwardRef((props: CanvasProps, ref: any) => {
     // 拖拽事件和组件映射
-    const { dragEnd, data, clearFocus } = props
+    const { data } = props
+    // engine 
+    const {focus, dragger}= useContext<Engine>(EngineContext)
     // container 属性
     const [container, setContainer] = useState<any>(data.container)
     return (
@@ -20,8 +21,8 @@ const EditorContent = forwardRef((props: CanvasProps, ref: any) => {
                 <div className={styles.canvasContentScroll}
                     style={{ ...container }}
                     ref={ref}
-                    onDragEnd={() => dragEnd()}
-                    onMouseDown={() => clearFocus()}
+                    onDragEnd={() => dragger.onDragEnd()}
+                    onMouseDown={() => focus.clearFocus()}
                 >
                     <Blocks
                         data={data}
