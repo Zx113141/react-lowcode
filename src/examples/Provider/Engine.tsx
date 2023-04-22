@@ -8,7 +8,9 @@ import { useFocus } from '../hooks/useFocus';
  * It's used to be a middleware to communicate with other components 
  * such as <Canvas></Canvas> <Configuration></Configuration>
  * Will EngineStore may control property which saved in the store rather than other hooks to edit property which is defined in the Store
+ *  
  * 
+ * The next key point is that we should do somethings for `Property`, `Events`, `Data` and synchronous block to blocks
  * **/
 
 
@@ -24,7 +26,12 @@ export interface BlockProps {
     events?: any,
     property?:any
 }
-
+export interface BlockItemProps {
+    data?: any,
+    events?: any,
+    property?:any,
+    id:string,
+}
 
 interface Focus {
     focusInfo: Map<string, BlockProps>,
@@ -43,7 +50,9 @@ export interface Engine {
     setFocusInfo:(focusInfo:Map<string, BlockProps>) => void
     setDraggerBlock:(block:BlockProps) => void,
     setBlockProper:(proper:any) => void,
-    propers:any | null
+    propers:any | null,
+    data?:'static'| 'dynamic',
+    events?:any
 }
 
 interface EngineCanvas {
@@ -108,7 +117,9 @@ const EngineProvider = (props: EngineCanvas) => {
                 for (let key in proper) {
                     EngineStore.propers[key] = proper[key]
                 }
+                console.log(EngineStore.propers.title,EngineStore.focus.focusInfo)
             }
+
         }
     })
     // console.log(EngineStore.dragger.)

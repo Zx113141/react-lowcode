@@ -1,4 +1,5 @@
 import * as echarts from 'echarts/core';
+import React from 'react'
 import {
     BarChart,
     // 系列类型的定义后缀都为 SeriesOption
@@ -23,7 +24,7 @@ import {
 import { LabelLayout, UniversalTransition } from 'echarts/features';
 import { CanvasRenderer } from 'echarts/renderers';
 import { useEffect } from 'react';
-import { type BlockProps } from '@/examples/Provider/Engine';
+import { type BlockItemProps } from '@/examples/Provider/Engine';
 
 // 通过 ComposeOption 来组合出一个只有必须组件和图表的 Option 类型
 type ECOption = echarts.ComposeOption<
@@ -49,8 +50,8 @@ echarts.use([
     CanvasRenderer
 ]);
 let chart = null
-const Bar = (props: BlockProps) => {
-    const { id, data, action } = props
+const Bar = (props: BlockItemProps) => {
+    const { id, data, events,property } = props
     const option: ECOption = {
         xAxis: {
             type: 'category',
@@ -87,4 +88,4 @@ const Bar = (props: BlockProps) => {
     )
 }
 
-export default Bar
+export default React.memo(Bar)

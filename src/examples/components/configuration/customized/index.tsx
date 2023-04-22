@@ -19,8 +19,8 @@ import { useSchema } from '@/examples/hooks/useSchema'
 
 
 const Customized = () => {
-    const focus = useContext<Engine>(EngineContext).focus.focusInfo
-    const [schema] = useSchema(focus)
+    const {focus, setBlockProper}= useContext<Engine>(EngineContext)
+    const [schema] = useSchema(focus.focusInfo)
     const SchemaField = useMemo(() => createSchemaField({
         components: {
             FormItem,
@@ -36,7 +36,7 @@ const Customized = () => {
         },
         effects() {
             onFormValuesChange((form: Form) => {
-                console.log(form.values)
+                setBlockProper(form.values)
             })
         },
     }), [])

@@ -92,7 +92,7 @@ const Blocks = (props: BlocksProps) => {
                             style={{ ...block.style }}
                             onMouseDown={(event: React.MouseEvent<HTMLDivElement>) => handleFocus(event, block)}
                         >
-                            <Component {...block} ></Component>
+                            <Component ></Component>
                             {/* <div className={focusItem.has(block.id) ? styles.blockFocus: ''}>
 
                             </div> */}
