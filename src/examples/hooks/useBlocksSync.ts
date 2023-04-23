@@ -1,6 +1,6 @@
 
 
-import React from "react";
+import React, { useCallback } from "react";
 import { BlockProps } from '../Provider/Engine';
 
 
@@ -8,7 +8,6 @@ export type actions = 'add' | 'delete' | 'update' | 'lock'
 
 export const useBlocksSync = (defaultValue: BlockProps[]): [BlockProps[], (action: actions, block: BlockProps | BlockProps[]) => void] => {
     const [blocks, setBlocks] = React.useState<BlockProps[]>(defaultValue)
-
     const asyncBlocks = React.useCallback((action: actions, block: BlockProps | BlockProps[]) => {
         switch (action) {
             case 'add':
@@ -23,14 +22,14 @@ export const useBlocksSync = (defaultValue: BlockProps[]): [BlockProps[], (actio
             case 'lock':
                 lockingBlocks()
                 break;
-            default: 
+            default:
                 throw Error('actions is not a valid type')
         }
     }, [blocks])
 
-    const addBlocks = React.useCallback((block:BlockProps) => {
+    const addBlocks = useCallback((block: BlockProps) => {
         setBlocks([...blocks, block])
-    }, [blocks])
+    },[blocks])
 
     const deleteBlocks = React.useCallback(() => {
 

@@ -1,10 +1,3 @@
-import { observer, useLocalObservable } from 'mobx-react-lite';
-import React, { createContext, useEffect } from 'react';
-import { useDragMenus } from '../hooks/useDragMenus';
-import { useFocus } from '../hooks/useFocus';
-import { useBlocksSync, type actions } from '../hooks/useBlocksSync';
-import { type EditorProps } from '../components/editor';
-import { useContainer } from '../hooks/useContainer';
 /***
  * Engine may be dutied to control <dragger> <focus> <moving> <...> 
  * It's used to be a middleware to communicate with other components and offer to blocks and container
@@ -14,6 +7,15 @@ import { useContainer } from '../hooks/useContainer';
  * 
  * The next key point is that we should do somethings for `Property`, `Events`, `Data` and synchronous block to blocks
  * **/
+
+import { observer, useLocalObservable } from 'mobx-react-lite';
+import React, { createContext, useEffect } from 'react';
+import { useDragMenus } from '../hooks/useDragMenus';
+import { useFocus } from '../hooks/useFocus';
+import { useBlocksSync, type actions } from '../hooks/useBlocksSync';
+import { type EditorProps } from '../components/editor';
+import { useContainer } from '../hooks/useContainer';
+
 
 
 export interface BlockProps {
@@ -108,13 +110,15 @@ const EngineProvider = (props: EngineCanvas) => {
         EngineStore.setFocusInfo(focusInfo)
     }, [focusInfo])
     useEffect(() => {
-        EngineStore.setDraggerBlock(block)
-    }, [block])
-
-    useEffect(() => {
+     
         if (block && JSON.stringify(block) !== '{}') {
-            EngineStore.setBlocks(blocks)
+            asyncBlocks('add', block)
+            EngineStore.setDraggerBlock(block)
         }
+    }, [block])
+    useEffect(() => {
+    
+        EngineStore.setBlocks(blocks)
     }, [blocks])
     // useEffect(() => {
     //     EngineStore.setDraggerBlock(block?.proper)

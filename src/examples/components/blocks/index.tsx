@@ -21,16 +21,16 @@ const Blocks = (props: BlocksProps) => {
     const { block } = dragger
     const { getFocus, focusInfo, handleFocusMap } = focus
     
-    
     // 鼠标点击坐标
     const [movingStart, setMovingStart] = useState<any>(null)
 
     useEffect(() => {
-        if (block && JSON.stringify(block) !== '{}') {
-            handleFocusMap(block as BlockProps)
-            asyncBlocks('add', block)
-        }
-    }, [block])
+        console.log(blocks)
+        // if (block && JSON.stringify(block) !== '{}') {
+        //     handleFocusMap(block as BlockProps)
+        //     asyncBlocks('add', block)
+        // }
+    }, [blocks])
     // 根据focus 进行组件移动
     const handleFocus = (e: React.MouseEvent<HTMLDivElement>, block: BlockProps) => {
         getFocus(e, block)
