@@ -6,27 +6,29 @@ import { DataContext, DataProviderProps } from '@/examples/Provider/Blocks';
 import { BlockProps, EngineContext, Engine } from '@/examples/Provider/Engine';
 import { observer } from 'mobx-react-lite';
 interface BlocksProps {
-    data: any,
     parentRef: React.MutableRefObject<any>,
-    scale: number
 }
 
 
 const Blocks = (props: BlocksProps) => {
-    const { data, parentRef: ref, scale } = props
-    const { focus, dragger } = useContext<Engine>(EngineContext)
+    const { parentRef: ref } = props
+    const { focus, dragger, container, blocks:blocksData } = useContext<Engine>(EngineContext)
+
+
+    const { scale } = container.container
+    const { blocks, asyncBlocks } = blocksData
     const { widgetMap } = useContext<DataProviderProps>(DataContext)
     const { block } = dragger
     const { getFocus, focusInfo, handleFocusMap } = focus
-    // 所有blocks
-    const [blocks, setBlocks] = useState<any>(data.blocks || [])
+    
+    
     // 鼠标点击坐标
     const [movingStart, setMovingStart] = useState<any>(null)
 
     useEffect(() => {
         if (block && JSON.stringify(block) !== '{}') {
             handleFocusMap(block as BlockProps)
-            setBlocks([...blocks, block])
+            asyncBlocks('add', block)
         }
     }, [block])
     // 根据focus 进行组件移动
@@ -73,14 +75,13 @@ const Blocks = (props: BlocksProps) => {
             }
         })
 
-        setBlocks(positions)
+        asyncBlocks('update', positions)
     }
     const revokeMove = () => {
         ref.current.removeEventListener('mousemove', handleMove)
         ref.current.removeEventListener('mouseup', revokeMove)
         setMovingStart(null)
     }
-
     return (
         <>
             {
@@ -92,7 +93,8 @@ const Blocks = (props: BlocksProps) => {
                             style={{ ...block.style }}
                             onMouseDown={(event: React.MouseEvent<HTMLDivElement>) => handleFocus(event, block)}
                         >
-                            <Component ></Component>
+                             {/* id, data, events,property } */}
+                            <Component id={block.id} data={block.data} events={block.events} property={block.property}></Component>
                             {/* <div className={focusItem.has(block.id) ? styles.blockFocus: ''}>
 
                             </div> */}

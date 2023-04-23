@@ -11,7 +11,7 @@ import { type Items } from "@/examples/components/menu"
 import EngineProvider from '@/examples/Provider/Engine'
 import EditConfigProvier from '@/examples/Provider/Editor'
 import DataProvider from "@/examples/Provider/Blocks"
-interface EditorProps {
+export interface EditorProps {
     widgetList: Items[],
     data: any
 }
@@ -27,8 +27,6 @@ const Editor = (props: EditorProps) => {
     const [collapse, setCollapse] = useState<boolean>(false)
 
     const canvasRef = useRef() as React.MutableRefObject<any>
-    // 负责菜单拖拽 和 放置事件
-    const [dragStart, dragEnd, block] = useDragMenus(canvasRef)
     // functions
     const changeCollapse = useCallback(() => {
         setCollapse(!collapse)
@@ -38,13 +36,12 @@ const Editor = (props: EditorProps) => {
             <DataProvider widgetList={widgetList}>
                 <Nav></Nav>
                 <ContainerPc>
-                    <EngineProvider canvasRef={canvasRef}>
+                    <EngineProvider canvasRef={canvasRef} data={data}>
                         <Menu
                             onCollapse={() => changeCollapse()}
                             items={widgetList}
                         ></Menu>
                         <EditorContent
-                            data={data}
                             ref={canvasRef}
                         ></EditorContent>
                         <ConfigurationsContent ></ConfigurationsContent>

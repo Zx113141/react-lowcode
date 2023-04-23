@@ -79,7 +79,6 @@ const Bar = (props: BlockItemProps) => {
         }
 
     }, [])
-    console.log(props)
     return (
 
         <div style={{ width: 600, height: 500 }} id={id}>
