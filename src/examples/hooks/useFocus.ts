@@ -2,15 +2,33 @@ import React, { useState ,useCallback} from "react";
 import {type BlockProps } from "../Provider/Engine";
 
 export const useFocus = ():
-[((e: React.MouseEvent<HTMLDivElement>, block: BlockProps) => void),() => void  , Map<string, BlockProps>,(block: BlockProps, isMultiple?: boolean) => void] => {
+[((e: React.MouseEvent<HTMLDivElement>, block: BlockProps,scale:number) => void),
+    () => void  , Map<string, BlockProps>,
+    (block: BlockProps, isMultiple?: boolean) => void,
+    {
+        startX:number,
+        startY:number,
+        scale:number
+    }
+] => {
 
     const [focusInfo, setFocusInfo] = useState<Map<string, BlockProps>>(new Map())
+    const [mouseStartMoving, setMouseStartMoving] = useState({
+        startX:0,
+        startY:0,
+        scale:0
+    })
 
-    const getFocus = (e: React.MouseEvent<HTMLDivElement>, block: BlockProps) => {
+    const getFocus = (e: React.MouseEvent<HTMLDivElement>, block: BlockProps,scale:number) => {
         e.preventDefault()
         e.stopPropagation()
+        setMouseStartMoving({
+            startX:e.clientX,
+            startY:e.clientY,
+            scale,
+        })
         if (e.ctrlKey) {
-            handleFocusMap(block, true)
+            handleFocusMap(block, true, )
         } else {
             handleFocusMap(block)
         }
@@ -45,5 +63,5 @@ export const useFocus = ():
     }
 
 
-    return [getFocus, clearFocus, focusInfo,handleFocusMap]
+    return [getFocus, clearFocus, focusInfo,handleFocusMap,mouseStartMoving]
 }

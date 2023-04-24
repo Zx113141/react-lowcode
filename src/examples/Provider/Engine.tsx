@@ -9,13 +9,13 @@
  * **/
 
 import { observer, useLocalObservable } from 'mobx-react-lite';
-import React, { createContext, useEffect } from 'react';
+import React, { createContext, useEffect, useState } from 'react';
 import { useDragMenus } from '../hooks/useDragMenus';
 import { useFocus } from '../hooks/useFocus';
-import { useBlocksSync, type actions } from '../hooks/useBlocksSync';
+import { useBlocksSync, type path } from '../hooks/useBlocksSync';
 import { type EditorProps } from '../components/editor';
 import { useContainer } from '../hooks/useContainer';
-
+import { useBlockMoving } from '../hooks/useBlockMoving';
 
 
 export interface BlockProps {
@@ -39,9 +39,14 @@ export interface BlockItemProps {
 
 interface Focus {
     focusInfo: Map<string, BlockProps>,
-    getFocus: (e: React.MouseEvent<HTMLDivElement>, block: BlockProps) => void,
+    getFocus: (e: React.MouseEvent<HTMLDivElement>, block: BlockProps,scale:number) => void,
     clearFocus: () => void,
     handleFocusMap: (block: BlockProps, isMultiple?: boolean) => void,
+    mouseStartMoving:{
+        startX:number,
+        startY:number,
+        scale:number
+    } 
 }
 interface Drag {
     onDragStart: (e: DragEvent, comp: any) => void
@@ -62,9 +67,14 @@ export interface Engine {
     },
     blocks: {
         blocks: BlockProps[],
-        asyncBlocks: (action: actions, block: BlockProps | BlockProps[]) => void
+        asyncBlocks: (action: string, block: BlockProps | BlockProps[],obj?:any) => void
     },
-
+    moving: {
+        handleMoving: (event: React.MouseEvent<HTMLDivElement>, scale: number) => void,
+    },
+    property:{
+        setProperty:(values:{[key:string]:any},focus:Map<string, BlockProps>) => void 
+    }
 }
 
 interface EngineCanvas {
@@ -78,9 +88,14 @@ interface EngineCanvas {
 export const EngineContext = createContext<Engine>({
     focus: {
         focusInfo: new Map(),
-        getFocus: (e: React.MouseEvent<HTMLDivElement>, block: BlockProps) => { },
+        getFocus: (e: React.MouseEvent<HTMLDivElement>, block: BlockProps,scale:number) => { },
         clearFocus: () => { },
-        handleFocusMap: (block: BlockProps, isMultiple?: boolean) => { }
+        handleFocusMap: (block: BlockProps, isMultiple?: boolean) => { },
+        mouseStartMoving:{
+            startX:0,
+            startY:0,
+            scale:0,
+        }
     },
     dragger: {
         onDragStart: () => { },
@@ -89,47 +104,56 @@ export const EngineContext = createContext<Engine>({
     },
     setFocusInfo: () => { },
     setDraggerBlock: () => { },
-    setBlocks: (blocks:  BlockProps[]) => {},
+    setBlocks: (blocks: BlockProps[]) => { },
     container: {
         container: null,
         onContainerEdit: (params: string, value: any) => { },
     },
     blocks: {
         blocks: [],
-        asyncBlocks: (action: actions, block: BlockProps | BlockProps[]) => { }
+        asyncBlocks: (action: string, block: BlockProps | BlockProps[]) => { }
+    },
+    moving: {
+        handleMoving: (event: React.MouseEvent<HTMLDivElement>, scale: number) => { },
+    },
+    property:{
+        setProperty:(values:{[key:string]:any},focus:Map<string, BlockProps>) => {} 
     }
 })
 
 
 const EngineProvider = (props: EngineCanvas) => {
+    // 拖拽相关
     const [dragStart, dragEnd, block] = useDragMenus(props.canvasRef)
-    const [getFocus, clearFocus, focusInfo, handleFocusMap] = useFocus()
+    // block 移动，焦点相关
+    const [getFocus, clearFocus, focusInfo, handleFocusMap,mouseStartMoving] = useFocus()
+    const [handlePrevMove,handleMove] = useBlockMoving()
+    // 父容器相关(画布)
     const [container, onContainerEdit] = useContainer(props.data.container)
+    // blocks 相关
     const [blocks, asyncBlocks] = useBlocksSync(props.data.blocks)
     useEffect(() => {
         EngineStore.setFocusInfo(focusInfo)
-    }, [focusInfo])
+        EngineStore.focus.mouseStartMoving = mouseStartMoving
+    }, [focusInfo,mouseStartMoving])
     useEffect(() => {
-     
         if (block && JSON.stringify(block) !== '{}') {
             asyncBlocks('add', block)
+            handleFocusMap(block)
             EngineStore.setDraggerBlock(block)
         }
     }, [block])
     useEffect(() => {
-    
         EngineStore.setBlocks(blocks)
     }, [blocks])
-    // useEffect(() => {
-    //     EngineStore.setDraggerBlock(block?.proper)
-    // },[block])
     const EngineStore = useLocalObservable((): Engine => {
         return {
             focus: {
                 getFocus,
                 clearFocus,
                 focusInfo,
-                handleFocusMap
+                handleFocusMap,
+                mouseStartMoving
             },
             dragger: {
                 onDragStart: dragStart,
@@ -144,6 +168,22 @@ const EngineProvider = (props: EngineCanvas) => {
                 blocks,
                 asyncBlocks,
             },
+            moving: {
+                handleMoving: (event: React.MouseEvent<HTMLDivElement>, scale: number) => {
+                    const size = EngineStore.focus.focusInfo.size
+                    const value = EngineStore.focus.focusInfo
+                    if (!size) {
+                        return 
+                    }
+                    if (size > 0) {
+                        if (size == 1) {
+                            handleMove(event, value, scale, [])
+                        } else {
+                            handleMove(event, value, scale, EngineStore.blocks.blocks)
+                        }
+                    }
+                },
+            },
             setFocusInfo: (focusInfo: Map<string, BlockProps>) => {
                 EngineStore.focus.focusInfo = focusInfo
             },
@@ -153,6 +193,14 @@ const EngineProvider = (props: EngineCanvas) => {
             setBlocks: (blocks: BlockProps[]) => {
                 EngineStore.blocks.blocks = blocks
             },
+            property:{
+                setProperty:(values:{[key:string]:any},focus:Map<string, BlockProps>) => {
+                    let focusId = focus.keys().next().value
+                    const focusBlock = EngineStore.blocks.blocks.find((blcok:BlockProps) => blcok.id == focusId) as BlockProps
+                    const proper = values
+                    EngineStore.blocks.asyncBlocks('update.property',[focusBlock], proper)
+                } 
+            }
         }
     })
     // console.log(EngineStore.dragger.)
