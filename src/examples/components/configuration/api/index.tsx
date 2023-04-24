@@ -1,10 +1,12 @@
 import { EngineContext, Engine } from "@/examples/Provider/Engine"
-import { Select, Timeline, Table, Tag } from "antd"
+import { Select, Timeline, Table, Tag ,Badge} from "antd"
 import type { ColumnsType } from 'antd/es/table';
 import { useCallback, useContext, useState } from "react"
 import styles from './index.module.less'
 import { apiDataSelect } from "@/configs/apiConifg"
 import { SmileOutlined } from '@ant-design/icons';
+import Apis from './apis'
+
 interface DataType {
     key: string;
     name: string;
@@ -37,7 +39,8 @@ const DataApis = () => {
             dataIndex: 'isMatch',
             key: 'isMatch',
             render:(value, record) => {
-                return <Tag color={value?'success':'warning'}>{value?'匹配成功':'匹配出错'}</Tag>
+             
+                return  <Badge status={value?'processing':'warning'} text={value?'匹配成功':'匹配出错'} />
             }
         },
         {
@@ -78,6 +81,10 @@ const DataApis = () => {
                     options={apiDataSelect}
                 />
             </div>
+            {
+              dataType === 'dynamic'? <Apis></Apis>:
+             null
+            }
             <Timeline>
                 <Timeline.Item>
                     <p>
