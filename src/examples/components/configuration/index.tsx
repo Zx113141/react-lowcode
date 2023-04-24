@@ -44,6 +44,7 @@ const ConfigurationsContent = () => {
         <div className={styles.configure}>
             <div className={styles.configureRadio}>
                 <Tabs
+                    defaultActiveKey={'datas'}
                     // tabPosition={tabPosition}
                     onChange={(activeKey) => toogleComp(activeKey)}
                     items={checkLists}

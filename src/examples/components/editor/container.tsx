@@ -1,4 +1,4 @@
-import Nav from "../../hooks/nav"
+
 import styles from './index.module.less'
 
 interface EditorProps {

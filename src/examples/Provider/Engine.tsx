@@ -59,7 +59,6 @@ export interface Engine {
     setFocusInfo: (focusInfo: Map<string, BlockProps>) => void
     setDraggerBlock: (block: BlockProps) => void,
     setBlocks: (blocks: BlockProps[]) => void,
-    data?: 'static' | 'dynamic',
     events?: any,
     container: {
         container: any,
@@ -74,6 +73,19 @@ export interface Engine {
     },
     property:{
         setProperty:(values:{[key:string]:any},focus:Map<string, BlockProps>) => void 
+    },
+    apiConifg:{
+        api?:'static' | 'dynamic',
+        data?:any,
+        action?:{
+            method:'post' | 'get' | 'option' | 'put' | 'delete' | string,
+            param?:string,
+            url:string,
+            tokens?:any,
+            isPolling?:boolean,
+            polling?:number
+        },
+        setApiData:(values:{[key:string]:any},focus:Map<string, BlockProps>) => void 
     }
 }
 
@@ -118,6 +130,9 @@ export const EngineContext = createContext<Engine>({
     },
     property:{
         setProperty:(values:{[key:string]:any},focus:Map<string, BlockProps>) => {} 
+    },
+    apiConifg:{
+        setApiData:(values:{[key:string]:any},focus:Map<string, BlockProps>) => {} 
     }
 })
 
@@ -200,6 +215,16 @@ const EngineProvider = (props: EngineCanvas) => {
                     const proper = values
                     EngineStore.blocks.asyncBlocks('update.property',[focusBlock], proper)
                 } 
+            },
+            apiConifg:{
+                setApiData: (values:{[key:string]:any},focus:Map<string, BlockProps>) => {
+                    let focusId = focus.keys().next().value
+                    const focusBlock = EngineStore.blocks.blocks.find((blcok:BlockProps) => blcok.id == focusId) as BlockProps
+                    const data = values
+
+                    // just put the api config to the blocks when render call it!~
+                    EngineStore.blocks.asyncBlocks('update.data',[focusBlock], data)
+                }
             }
         }
     })
