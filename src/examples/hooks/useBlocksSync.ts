@@ -3,13 +3,13 @@
 import React, { useCallback } from "react";
 import { BlockProps } from '../Provider/Engine';
 
+export type path = 'property' | 'data' | 'events'
 
-export type actions = 'add' | 'delete' | 'update' | 'lock'
-
-export const useBlocksSync = (defaultValue: BlockProps[]): [BlockProps[], (action: actions, block: BlockProps | BlockProps[]) => void] => {
+export const useBlocksSync = (defaultValue: BlockProps[]): [BlockProps[], (action: string, block: BlockProps | BlockProps[]) => void] => {
     const [blocks, setBlocks] = React.useState<BlockProps[]>(defaultValue)
-    const asyncBlocks = React.useCallback((action: actions, block: BlockProps | BlockProps[]) => {
-        switch (action) {
+    const asyncBlocks = React.useCallback((action: string, block: BlockProps | BlockProps[], obj?: any) => {
+        const path:[string, path] = action.split('.') as [string, path]
+        switch (path[0]) {
             case 'add':
                 addBlocks(block as BlockProps)
                 break;
@@ -17,7 +17,7 @@ export const useBlocksSync = (defaultValue: BlockProps[]): [BlockProps[], (actio
                 deleteBlocks()
                 break;
             case 'update':
-                updateBlocks()
+                updateBlocks(block, obj, path[1])
                 break;
             case 'lock':
                 lockingBlocks()
@@ -29,14 +29,23 @@ export const useBlocksSync = (defaultValue: BlockProps[]): [BlockProps[], (actio
 
     const addBlocks = useCallback((block: BlockProps) => {
         setBlocks([...blocks, block])
-    },[blocks])
+    }, [blocks])
 
     const deleteBlocks = React.useCallback(() => {
 
     }, [blocks])
 
-    const updateBlocks = React.useCallback(() => {
+    const updateBlocks = React.useCallback((block: BlockProps | BlockProps[], obj: any, path: path) => {
+        if (block instanceof Array) {
+            if (block.length > 1) {
 
+            } else {
+                let [focusBlock] = block
+                const filterBlocks = blocks.filter((bl: BlockProps) => bl.id !== block[0].id)
+                focusBlock[path] = {...obj}
+                setBlocks([...filterBlocks, focusBlock])
+            }
+        }
     }, [blocks])
 
     const lockingBlocks = React.useCallback(() => {

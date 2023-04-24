@@ -3,10 +3,8 @@ import Customized from './customized'
 import Animations from './animation'
 import DataApis from './api'
 import Events from './events'
-import { useState, createContext, useMemo, useEffect } from 'react'
-import { Radio, Tabs } from 'antd'
-import { ISchema } from '@formily/react'
-import {type BlockProps } from '@/examples/Provider/Engine'
+import {useMemo, useEffect } from 'react'
+import { Tabs } from 'antd'
 
 
 const ConfigurationsContent = () => {

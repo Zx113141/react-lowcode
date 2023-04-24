@@ -82,7 +82,6 @@ const Bar = (props: BlockItemProps) => {
     return (
 
         <div style={{ width: 600, height: 500 }} id={id}>
-            <h1>bar</h1>
         </div>
     )
 }
