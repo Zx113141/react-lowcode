@@ -2,6 +2,10 @@ import React, { useState } from "react";
 import { Modal, Descriptions, Button, Table } from "antd";
 import styles from './apis.module.less'
 import type { ColumnsType } from 'antd/es/table';
+import ApiForm from "./apiForm";
+import {
+    WifiOutlined
+} from '@ant-design/icons';
 
 
 interface DataType {
@@ -72,6 +76,7 @@ const Apis = () => {
                 <Descriptions.Item label="是否代理" span={4}>是/否</Descriptions.Item>
                 <Descriptions.Item label="代理地址" span={4}>https://gitee.com/zx1313/react-ts-vite.git</Descriptions.Item>
             </Descriptions>
+            <Button type="dashed" style={{width:'100%'}}><WifiOutlined />接口测试</Button>
             <Modal
                 title="接口信息编辑"
                 open={onEdit}
@@ -79,10 +84,10 @@ const Apis = () => {
                 onCancel={handleCancel}
                 okText="确认"
                 cancelText="取消"
-                width={1400}
+                width={1000}
             >
-                <div style={{ height: 600 }}>
-
+                <div >
+                    <ApiForm></ApiForm>
                 </div>
                 
                 <Table rowSelection={rowSelection} columns={columns} dataSource={data} />
