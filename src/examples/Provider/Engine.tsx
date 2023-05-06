@@ -1,11 +1,14 @@
 /***
  * Engine may be dutied to control <dragger> <focus> <moving> <...> 
  * It's used to be a middleware to communicate with other components and offer to blocks and container
- * such as <Canvas></Canvas> <Configuration></Configuration>
- * Will EngineStore may control property which saved in the store rather than other hooks to edit property which is defined in the Store
- * seperate useBlcokMoving and useBlocks 
+ * such as <Canvas></Canvas> <Configuration></Configuration>, 
+ * and its responsed to manage other Engine without none of I/O and none Of UI
  * 
  * The next key point is that we should do somethings for `Property`, `Events`, `Data` and synchronous block to blocks
+ * 
+ * seperate canvas , output JSON 
+ * 
+ * s
  * **/
 
 import { observer, useLocalObservable } from 'mobx-react-lite';

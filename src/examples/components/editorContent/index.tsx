@@ -1,6 +1,5 @@
 import { useEffect, useState, forwardRef, useContext } from 'react'
 import styles from './index.module.less'
-import DataProvider from '../editor/index'
 import Blocks from '../blocks'
 import { Engine, EngineContext } from '@/examples/Provider/Engine'
 interface CanvasProps {
