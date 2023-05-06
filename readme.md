@@ -15,3 +15,7 @@
 ### 引入mobx-react-lite 做全局状态管理 优化hooks泛滥问题，减少不必要rerender(已解决)
 
 ### 做全局配置设置全局主题，色彩，全局待办(色彩已解决)
+
+## menu 动态注册的话 需要进行inject map 处理，将dragstart 注册入 menu中
+
+## 包括dragend 需要注册进canvas里

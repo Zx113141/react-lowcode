@@ -12,6 +12,7 @@ import EngineProvider from '@/examples/Provider/Engine'
 import EditConfigProvier from '@/examples/Provider/Editor'
 import DataProvider from "@/examples/Provider/Blocks"
 import { AliveScope } from "react-activation"
+
 export interface EditorProps {
     widgetList: Items[],
     data: any
@@ -36,20 +37,18 @@ const Editor = (props: EditorProps) => {
         <EditConfigProvier>
             <DataProvider widgetList={widgetList}>
                 <Nav></Nav>
-                <AliveScope>
-                    <ContainerPc>
-                        <EngineProvider canvasRef={canvasRef} data={data}>
-                            <Menu
-                                onCollapse={() => changeCollapse()}
-                                items={widgetList}
-                            ></Menu>
-                            <EditorContent
-                                ref={canvasRef}
-                            ></EditorContent>
-                            <ConfigurationsContent ></ConfigurationsContent>
-                        </EngineProvider>
-                    </ContainerPc>
-                </AliveScope>
+                <ContainerPc>
+                    <EngineProvider canvasRef={canvasRef} data={data}>
+                        <Menu
+                            onCollapse={() => changeCollapse()}
+                            items={widgetList}
+                        ></Menu>
+                        <EditorContent
+                            ref={canvasRef}
+                        ></EditorContent>
+                        <ConfigurationsContent ></ConfigurationsContent>
+                    </EngineProvider>
+                </ContainerPc>
             </DataProvider>
 
         </EditConfigProvier>

@@ -12,12 +12,12 @@ interface BlocksProps {
 
 const Blocks = (props: BlocksProps) => {
     const { widgetMap } = useContext<DataProviderProps>(DataContext)
-    const { container, blocks: blocksData, focus } = useContext<Engine>(EngineContext)
+    const { container, blocks: blocksData } = useContext<Engine>(EngineContext)
 
     // 移动， 焦点， 移动倍数
     const { scale } = container.container
     const { blocks } = blocksData
-    const { getFocus, focusInfo } = focus
+    // const { getFocus, focusInfo } = focus
 
     return (
         <>
@@ -26,9 +26,11 @@ const Blocks = (props: BlocksProps) => {
                     const Component = widgetMap[block.type].render
                     return (
                         <div key={block.id}
-                            className={classNames(styles.block, focusInfo.has(block.id) ? styles.blockFocus : '')}
+                            className={classNames(styles.block,
+                                //  focusInfo.has(block.id) ? styles.blockFocus : ''
+                                 )}
                             style={{ ...block.style }}
-                            onMouseDown={(event: React.MouseEvent<HTMLDivElement>) => getFocus(event, block,scale)}
+                            // onMouseDown={(event: React.MouseEvent<HTMLDivElement>) => getFocus(event, block,scale)}
                         >
                             {/* id, data, events,property } */}
                             <Component id={block.id} data={block.data} events={block.events} property={block.property}></Component>

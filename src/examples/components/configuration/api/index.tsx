@@ -15,8 +15,8 @@ interface DataType {
     isMatch:boolean;
 }
 const DataApis = () => {
-    const { focus, blocks } = useContext<Engine>(EngineContext)
-    const focusItem = focus.focusInfo.values().next().value
+    // const { focus, blocks } = useContext<Engine>(EngineContext)
+    // const focusItem = focus.focusInfo.values().next().value
     const [dataType, setDataType] = useState<string>()
 
     const handleChange = (e: string) => {
