@@ -7,6 +7,7 @@ import { EngineContext,Engine } from "@/examples/Provider/Engine";
 
 interface SubMenuProps {
     items: Items[]
+    onDragStart:any
 }
 export interface SubMenu {
     icon?: () => JSX.Element,
@@ -19,8 +20,7 @@ export interface SubMenu {
 const SubMenu = (props: SubMenuProps) => {
     // 拖拽上下文
     console.log('SubMenu rerender')
-    const {dragger} = useContext<Engine>(EngineContext)
-
+    const {onDragStart} = props
     // 激活菜单
     const [activeKey, setActiveKey] = useState<any[]>([])
     // 组件页
@@ -82,7 +82,7 @@ const SubMenu = (props: SubMenuProps) => {
                     {
                         activeList?.map((comp: any) => {
                             return (
-                                <div className={styles.subsCompBlock} key={comp.key} draggable onDragStart={(e: React.DragEventHandler<HTMLDivElement>) => dragger.onDragStart(e, comp) }>
+                                <div className={styles.subsCompBlock} key={comp.key} draggable onDragStart={(e: React.DragEventHandler<HTMLDivElement>) => onDragStart(e, comp) }>
                                     <div className={styles.subsCompBlockTitle}>
                                         {
                                             comp.name

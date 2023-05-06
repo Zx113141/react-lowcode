@@ -10,6 +10,8 @@
 
 // import somethings
 import { mixins } from "../utils/mixin"
+import {CanvasContext} from "../Provider/Canvas"
+import { useContext } from "react"
 export const injectComponentsMap = (origin:any, newVaue:any) => {
 
     const components = mixins(origin, newVaue)
@@ -28,3 +30,23 @@ export const injectSchema = () => {
 
 }
 
+interface canvas {
+    canvasRef: React.MutableRefObject<any>
+}
+
+export const createDragRef = (props:canvas) => {
+    
+    // 连接Engin内部的 dragStart and dragEnd
+    const dragStart = () => {
+
+    }
+    
+    const dragEnd = () => {
+
+    }
+
+    return {
+        dragStart,
+        dragEnd
+    }
+}

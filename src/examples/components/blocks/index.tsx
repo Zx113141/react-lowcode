@@ -6,7 +6,7 @@ import { DataContext, DataProviderProps } from '@/examples/Provider/Blocks';
 import { BlockProps, EngineContext, Engine } from '@/examples/Provider/Engine';
 import { observer } from 'mobx-react-lite';
 interface BlocksProps {
-    parentRef: React.MutableRefObject<any>,
+    // parentRef: React.MutableRefObject<any>,
 }
 
 

@@ -1,6 +1,6 @@
 
 import ContainerPc from "./container"
-import { useCallback, useRef } from "react"
+import { useCallback, useMemo, useRef } from "react"
 import Menu from '@/examples/components/menu'
 import { useState } from 'react'
 import EditorContent from "../editorContent"
@@ -9,9 +9,9 @@ import Nav from "@/examples/components/nav"
 import { useDragMenus } from "@/examples/hooks/useDragMenus"
 import { type Items } from "@/examples/components/menu"
 import EngineProvider from '@/examples/Provider/Engine'
+import { createDragRef } from "@/examples/core"
 import EditConfigProvier from '@/examples/Provider/Editor'
 import DataProvider from "@/examples/Provider/Blocks"
-import { AliveScope } from "react-activation"
 
 export interface EditorProps {
     widgetList: Items[],
@@ -33,18 +33,27 @@ const Editor = (props: EditorProps) => {
     const changeCollapse = useCallback(() => {
         setCollapse(!collapse)
     }, [collapse])
+
+    const { dragStart, dragEnd } = useMemo(() => (
+        createDragRef({
+            canvasRef
+        })
+    ), [canvasRef])
+
+    // throw dragStart
     return (
         <EditConfigProvier>
             <DataProvider widgetList={widgetList}>
                 <Nav></Nav>
                 <ContainerPc>
-                    <EngineProvider canvasRef={canvasRef} data={data}>
+                    <EngineProvider data={data} >
                         <Menu
                             onCollapse={() => changeCollapse()}
                             items={widgetList}
+                            dragStart={dragStart}
                         ></Menu>
                         <EditorContent
-                            ref={canvasRef}
+                            dragEnd={dragEnd}
                         ></EditorContent>
                         <ConfigurationsContent ></ConfigurationsContent>
                     </EngineProvider>

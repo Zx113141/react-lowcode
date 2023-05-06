@@ -130,4 +130,4 @@ const Nav = () => {
     )
 }
 
-export default observer(Nav)
+export default React.memo(observer(Nav))

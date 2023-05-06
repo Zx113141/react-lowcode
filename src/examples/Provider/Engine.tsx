@@ -66,7 +66,7 @@ export interface Engine {
 
 interface EngineCanvas {
     children: React.ReactNode,
-    canvasRef: React.MutableRefObject<any>,
+    // canvasRef: React.MutableRefObject<any>,
     data: {
         container: any,
         blocks: BlockProps[]
@@ -88,7 +88,7 @@ export const EngineContext = createContext<Engine>({
 
 
 const EngineProvider = (props: EngineCanvas) => {
-    const { canvasRef } = props
+    // const { canvasRef } = props
     // 父容器相关(画布)
     const [container, onContainerEdit] = useContainer(props.data.container)
     // sync blocks 
@@ -117,7 +117,7 @@ const EngineProvider = (props: EngineCanvas) => {
     // console.log(EngineStore.dragger.)
     return (
         <EngineContext.Provider value={EngineStore}>
-            <CanvasProvider canvasRef={canvasRef} blocks={blocks}>
+            <CanvasProvider blocks={blocks}>
                 {props.children}
             </CanvasProvider>
 
@@ -126,3 +126,13 @@ const EngineProvider = (props: EngineCanvas) => {
 }
 
 export default observer(EngineProvider)
+
+
+// export const dragStart = () => {
+
+
+// }
+
+// export const dragEnd = () => {
+
+// }

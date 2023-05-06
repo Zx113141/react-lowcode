@@ -3,23 +3,24 @@ import styles from './index.module.less'
 import Blocks from '../blocks'
 import { Engine, EngineContext } from '@/examples/Provider/Engine'
 interface CanvasProps {
+    dragEnd: any
 }
 
 
 const EditorContent = forwardRef((props: CanvasProps, ref: any) => {
+    const { dragEnd } = props
     // engine 
-    const {focus, dragger, container}= useContext<Engine>(EngineContext)
+    const { container } = useContext<Engine>(EngineContext)
     return (
         <div className={styles.canvas}>
             <div className={styles.canvasContent}>
                 <div className={styles.canvasContentScroll}
                     style={{ ...container.container }}
                     ref={ref}
-                    onDragEnd={() => dragger.onDragEnd()}
-                    onMouseDown={() => focus.clearFocus()}
+                    onDragEnd={() => dragEnd()}
+                // onMouseDown={() => focus.clearFocus()}
                 >
                     <Blocks
-                        parentRef={ref}
                     ></Blocks>
                 </div>
             </div>
