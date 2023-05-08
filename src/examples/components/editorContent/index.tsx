@@ -1,9 +1,10 @@
-import { useEffect, useState, forwardRef, useContext } from 'react'
+import { forwardRef, useContext } from 'react'
 import styles from './index.module.less'
-import Blocks from '../blocks'
+import CanvasContent from '../blocks/parent'
 import { Engine, EngineContext } from '@/examples/Provider/Engine'
 interface CanvasProps {
-    dragEnd: any
+    dragEnd: any,
+    onFocus:any
 }
 
 
@@ -14,15 +15,7 @@ const EditorContent = forwardRef((props: CanvasProps, ref: any) => {
     return (
         <div className={styles.canvas}>
             <div className={styles.canvasContent}>
-                <div className={styles.canvasContentScroll}
-                    style={{ ...container.container }}
-                    ref={ref}
-                    onDragEnd={() => dragEnd()}
-                // onMouseDown={() => focus.clearFocus()}
-                >
-                    <Blocks
-                    ></Blocks>
-                </div>
+                <CanvasContent container={container} dragEnd={dragEnd} ref={ref}></CanvasContent>
             </div>
         </div>
     )

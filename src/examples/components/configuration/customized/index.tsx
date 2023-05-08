@@ -19,46 +19,47 @@ import { useSchema } from '@/examples/hooks/useSchema'
 
 
 const Customized = () => {
-    const {focus,property}= useContext<Engine>(EngineContext)
-    const [schema] = useSchema(focus.focusInfo)
-    const SchemaField = useMemo(() => createSchemaField({
-        components: {
-            FormItem,
-            FormCollapse,
-            Input,
-            Switch,
-            ColorPick
-        },
-    }), [schema])
-    const form = useMemo(() => createForm({
-        initialValues: {
+    // const {focus,property}= useContext<Engine>(EngineContext)
+    // const [schema] = useSchema(focus.focusInfo)
+    // const SchemaField = useMemo(() => createSchemaField({
+    //     components: {
+    //         FormItem,
+    //         FormCollapse,
+    //         Input,
+    //         Switch,
+    //         ColorPick
+    //     },
+    // }), [schema])
+    // const form = useMemo(() => createForm({
+    //     initialValues: {
 
-        },
-        effects() {
-            onFormValuesChange((form: Form) => {
-                property.setProperty(form.values,focus.focusInfo)
-            })
-        },
-    }), [])
-    const formCollapse = FormCollapse.createFormCollapse()
-    const genExtra = () => (
-        <SettingOutlined
-            onClick={event => {
-                // If you don't want click extra trigger collapse, you can prevent this:
-                event.stopPropagation();
-            }}
-        />
-    );
+    //     },
+    //     effects() {
+    //         onFormValuesChange((form: Form) => {
+    //             property.setProperty(form.values,focus.focusInfo)
+    //         })
+    //     },
+    // }), [])
+    // const formCollapse = FormCollapse.createFormCollapse()
+    // const genExtra = () => (
+    //     <SettingOutlined
+    //         onClick={event => {
+    //             // If you don't want click extra trigger collapse, you can prevent this:
+    //             event.stopPropagation();
+    //         }}
+    //     />
+    // );
     return (
         <>
-            {
-                JSON.stringify(schema) == '{}' ? <Empty ></Empty> :
+        <Empty ></Empty>
+            {/* {
+                JSON.stringify(schema) == '{}' ?  :
                     <FormProvider form={form}>
                         <FormLayout labelCol={6} wrapperCol={10}>
                             <SchemaField schema={schema} scope={{ formCollapse, genExtra }} />
                         </FormLayout>
                     </FormProvider>
-            }
+            } */}
         </>
 
     )

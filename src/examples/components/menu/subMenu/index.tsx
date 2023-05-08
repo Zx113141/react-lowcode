@@ -3,11 +3,10 @@ import styles from './index.module.less'
 import classNames from 'classnames';
 import { useMenu } from "../useMenu";
 import { type Items } from '..'
-import { EngineContext,Engine } from "@/examples/Provider/Engine";
 
 interface SubMenuProps {
     items: Items[]
-    onDragStart:any
+    onDragStart:(e:React.DragEventHandler<HTMLDivElement>, comp:any) => void
 }
 export interface SubMenu {
     icon?: () => JSX.Element,
@@ -82,7 +81,7 @@ const SubMenu = (props: SubMenuProps) => {
                     {
                         activeList?.map((comp: any) => {
                             return (
-                                <div className={styles.subsCompBlock} key={comp.key} draggable onDragStart={(e: React.DragEventHandler<HTMLDivElement>) => onDragStart(e, comp) }>
+                                <div className={styles.subsCompBlock} key={comp.key} draggable onDragStart={(e:React.DragEventHandler<HTMLDivElement>) => onDragStart(e, comp) }>
                                     <div className={styles.subsCompBlockTitle}>
                                         {
                                             comp.name

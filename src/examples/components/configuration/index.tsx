@@ -6,6 +6,11 @@ import Events from './events'
 import {useMemo, useEffect } from 'react'
 import { Tabs } from 'antd'
 
+interface ConfigurationsContentProps {
+    panel:() => JSX.Element,
+    onWatch: (params:any) => void
+}
+
 
 const ConfigurationsContent = () => {
 

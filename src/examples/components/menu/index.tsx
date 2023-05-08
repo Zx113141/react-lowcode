@@ -9,7 +9,7 @@ export interface MenuProps {
     style?: React.CSSProperties
     theme?: string,
     onCollapse?: () => void
-    dragStart?: (e: DragEvent, comp: any) => void
+    dragStart?: (e: React.DragEventHandler<HTMLDivElement>, comp: any) => void
 }
 export interface Items {
     property: string,
@@ -35,7 +35,6 @@ export const MenuContext = createContext<MenuProps>({
     items: []
 })
 const MenuProvider = React.memo((props: MenuProps) => {
-
     return (
         <div className={styles.menu}>
             <div className={styles.menuSearch} >
@@ -50,7 +49,7 @@ const MenuProvider = React.memo((props: MenuProps) => {
                     </span>
                 </div>
             </div>
-            <SubMenu  {...props}>
+            <SubMenu  {...props} onDragStart={props.dragStart}>
             </SubMenu>
         </div>
 

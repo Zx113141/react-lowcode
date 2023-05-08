@@ -6,7 +6,6 @@ import { useState } from 'react'
 import EditorContent from "../editorContent"
 import ConfigurationsContent from "../configuration"
 import Nav from "@/examples/components/nav"
-import { useDragMenus } from "@/examples/hooks/useDragMenus"
 import { type Items } from "@/examples/components/menu"
 import EngineProvider from '@/examples/Provider/Engine'
 import { createDragRef } from "@/examples/core"
@@ -33,20 +32,18 @@ const Editor = (props: EditorProps) => {
     const changeCollapse = useCallback(() => {
         setCollapse(!collapse)
     }, [collapse])
-
-    const { dragStart, dragEnd } = useMemo(() => (
-        createDragRef({
-            canvasRef
-        })
-    ), [canvasRef])
-
     // throw dragStart
+    const { dragStart, dragEnd } = createDragRef({
+        canvasRef
+    })
+
+
     return (
         <EditConfigProvier>
             <DataProvider widgetList={widgetList}>
                 <Nav></Nav>
                 <ContainerPc>
-                    <EngineProvider data={data} >
+                    <EngineProvider data={data}>
                         <Menu
                             onCollapse={() => changeCollapse()}
                             items={widgetList}
@@ -54,8 +51,13 @@ const Editor = (props: EditorProps) => {
                         ></Menu>
                         <EditorContent
                             dragEnd={dragEnd}
+                            onFocus={null}
                         ></EditorContent>
-                        <ConfigurationsContent ></ConfigurationsContent>
+                        <ConfigurationsContent 
+                            panel={() => <div></div>}
+                            onWatch={null}
+
+                        ></ConfigurationsContent>
                     </EngineProvider>
                 </ContainerPc>
             </DataProvider>
