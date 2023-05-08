@@ -1,10 +1,11 @@
-import React, { useState, useCallback } from 'react'
-import {type BlockProps } from '../Provider/Engine'
+import React, { useState, useCallback, useContext } from 'react'
+import { BlockProps } from '../Provider/Engine'
 
 export const useDragMenus = (ref: any):
-    [((e: React.DragEventHandler<HTMLDivElement>, comp: any) => void), () => void, ] => {
+    [((e: React.DragEventHandler<HTMLDivElement>, comp: any) => void), () => void, BlockProps | any] => {
     // 将修改后的数据同步给dragList
-    // const [block, setBlock] = useState<BlockProps | {}>({})
+    const [block, setBlock] = useState<BlockProps | {}>({})
+
     let current: any = null
     const dragStart = useCallback((e: React.DragEventHandler<HTMLDivElement>, comp: any) => {
         current = comp
@@ -13,27 +14,28 @@ export const useDragMenus = (ref: any):
         ref.current?.addEventListener('dragleave', dragLeave)
         ref.current?.addEventListener('drop', dragDrop)
     }, [ref])
-    const dragOver = (e: React.DragEventHandler<HTMLDivElement>) => {
+    const dragOver = (e: DragEvent) => {
         // e.dataTransfer.dropEffect = 'move'
         e.preventDefault()
     }
     // 放置后要获取焦点
-    const dragDrop = (e: React.DragEventHandler<HTMLDivElement>,) => {
+    const dragDrop = useCallback((e: DragEvent,) => {
         if (!current) return
-        // setBlock({
-        //     style: {
-        //         left: e.offsetX,
-        //         top: e.offsetY,
-        //         zIndex: 4,
-        //         // alignCenter:true
-        //     },
-        //     type: current.key,
-        //     id: String(new Date().getTime()),
-        //     ...current,
-        // })
+        setBlock({
+            style: {
+                left: e.offsetX,
+                top: e.offsetY,
+                zIndex: 4,
+                // alignCenter:true
+            },
+            type: current.key,
+            id: String(new Date().getTime()),
+            ...current,
+        })
+
         console.log('放置成功')
         current = null
-    }
+    }, [])
     const dragLeave = (e: React.DragEventHandler<HTMLDivElement>) => {
         // e.dataTransfer.dropEffect = 'none'
     }
@@ -45,6 +47,6 @@ export const useDragMenus = (ref: any):
         ref.current?.removeEventListener('dragover', dragOver)
         ref.current?.removeEventListener('dragleave', dragLeave)
         ref.current?.removeEventListener('drop', dragDrop)
-    },[ref])
-    return [dragStart, dragEnd]
+    }, [ref])
+    return [dragStart, dragEnd, block]
 }

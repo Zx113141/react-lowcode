@@ -9,36 +9,22 @@
 
 
 // import somethings
-import { mixins } from "../utils/mixin"
-import { CanvasContext } from "../Provider/Canvas"
-import { useContext } from "react"
 
 import { useDragMenus } from "../hooks/useDragMenus"
-
-
-export const injectComponentsMap = (origin: any, newVaue: any) => {
-
-    const components = mixins(origin, newVaue)
-
-    return components
-
-}
-
-export const injectCanvas = () => {
-
-
-}
-
+import {useContext} from 'react'
+import { type BlockProps, EngineContext, type Engine } from '@/examples/Provider/Engine';
 
 
 interface canvas {
     canvasRef: React.MutableRefObject<any>
+    // blocks:BlockProps[]
 }
 
-export const createDragRef = (props: canvas) => {
-    const [dragStart, dragEnd] = useDragMenus(props.canvasRef)
-    return {
-        dragStart,
-        dragEnd
-    }
-}
+// export const createDragRef = (props: canvas) => {
+
+//     // doBlocks('add', block)
+//     return {
+//         dragStart,
+//         dragEnd
+//     }
+// }

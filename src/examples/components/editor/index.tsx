@@ -8,9 +8,11 @@ import ConfigurationsContent from "../configuration"
 import Nav from "@/examples/components/nav"
 import { type Items } from "@/examples/components/menu"
 import EngineProvider from '@/examples/Provider/Engine'
-import { createDragRef } from "@/examples/core"
+// import { createDragRef } from "@/examples/core"
 import EditConfigProvier from '@/examples/Provider/Editor'
 import DataProvider from "@/examples/Provider/Blocks"
+import Blocks from '../blocks'
+import data from '@/configs/data.json';
 
 export interface EditorProps {
     widgetList: Items[],
@@ -32,29 +34,27 @@ const Editor = (props: EditorProps) => {
     const changeCollapse = useCallback(() => {
         setCollapse(!collapse)
     }, [collapse])
-    // throw dragStart
-    const { dragStart, dragEnd } = createDragRef({
-        canvasRef
-    })
 
+
+    // throw somethings from Engine/core
     return (
         <EditConfigProvier>
             <DataProvider widgetList={widgetList}>
                 <Nav></Nav>
-                <EngineProvider data={data}>
+                <EngineProvider data={data} canvasRef={canvasRef}>
                     <ContainerPc
-                        menu={<Menu
-                            onCollapse={() => changeCollapse()}
-                            items={widgetList}
-                            dragStart={dragStart}
-                        ></Menu>}
-                        dragEnd={dragEnd}
-                        onFocus={null}
-                        canvasRef={canvasRef}
+                        menu={
+                            <Menu
+                                onCollapse={() => changeCollapse()}
+                                items={widgetList}
+                            ></Menu>
+                        }
+                        blocks={<Blocks></Blocks>}
+                        ref={canvasRef}
                         configure={
                             <ConfigurationsContent
-                                panel={() => <div></div>}
-                                onWatch={null}
+                            // panel={() => <div></div>}
+                            // onWatch={null}
 
                             ></ConfigurationsContent>
                         }

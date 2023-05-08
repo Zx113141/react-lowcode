@@ -12,11 +12,10 @@ interface BlocksProps {
 
 const Blocks = (props: BlocksProps) => {
     const { widgetMap } = useContext<DataProviderProps>(DataContext)
-    const { container, blocks: blocksData } = useContext<Engine>(EngineContext)
+    const { container, blocks } = useContext<Engine>(EngineContext)
 
     // 移动， 焦点， 移动倍数
     const { scale } = container.container
-    const { blocks } = blocksData
     // const { getFocus, focusInfo } = focus
 
     return (

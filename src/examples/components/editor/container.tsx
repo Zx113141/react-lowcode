@@ -1,40 +1,42 @@
 
 import styles from './index.module.less'
-import { useImperativeHandle, useContext, useRef, ReactNode } from 'react'
-// import styles from './index.module.less'
-import CanvasContent from '../blocks/parent'
+import React, { useContext, ReactNode, forwardRef } from 'react'
 import { Engine, EngineContext } from '@/examples/Provider/Engine'
+
 interface CanvasProps {
-    dragEnd: () => void,
-    onFocus: any
-    canvaRef: React.MutableRefObject<any>
+    // onFocus: any
+    // canvaRef: React.MutableRefObject<any>
     configure: ReactNode
     menu: ReactNode
+    blocks: ReactNode
 }
 
 
-const ContainerPc = (props: CanvasProps) => {
-    const { dragEnd, configure, menu } = props
-    const ref = useRef() as React.MutableRefObject<any>
+const ContainerPc = forwardRef((props: CanvasProps, ref: any) => {
+    const {  configure, menu ,blocks} = props
     // engine 
-    const { container } = useContext<Engine>(EngineContext)
+    const { container ,dragger} = useContext<Engine>(EngineContext)
+    console.log('container 渲染了')
     return (
         <div className={styles.container}>
-            {
-                menu
-            }
+            {menu}
             <div className={styles.canvas}>
                 <div className={styles.canvasContent}>
-                    <CanvasContent container={container} dragEnd={dragEnd} ref={ref}></CanvasContent>
+                    <div className={styles.canvasContentScroll}
+                        style={{ ...container.container }}
+                        ref={ref}
+                        onDragEnd={() => dragger?.dragEnd()}
+                    // onMouseDown={() => focus.clearFocus()}
+                    >
+                        {blocks}
+                    </div>
                 </div>
 
 
             </div>
-            {
-                configure
-            }
+            {configure}
         </div>
     )
-}
+})
 
-export default ContainerPc
+export default React.memo(ContainerPc)

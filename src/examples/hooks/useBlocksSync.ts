@@ -28,6 +28,7 @@ export const useBlocksSync = (defaultValue: BlockProps[]): [BlockProps[], (actio
     }, [blocks])
 
     const addBlocks = useCallback((block: BlockProps) => {
+        console.log('add block')
         setBlocks([...blocks, block])
     }, [blocks])
 

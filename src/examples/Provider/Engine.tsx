@@ -13,12 +13,11 @@
 
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import React, { createContext, useCallback, useEffect, useState } from 'react';
-
+import { useBlocksSync } from "../hooks/useBlocksSync"
 import { type EditorProps } from '../components/editor';
 import { useContainer } from '../hooks/useContainer';
+import { useDragMenus } from '../hooks/useDragMenus';
 import { useBlockMoving } from '../hooks/useBlockMoving';
-import CanvasProvider from '@/examples/Provider/Canvas'
-
 export interface BlockProps {
     type: string,
     id: string,
@@ -39,15 +38,16 @@ export interface BlockItemProps {
 }
 
 export interface Engine {
-    events?: any,
     container: {
         container: any,
         onContainerEdit: (params: string, value: any) => void,
     },
-    blocks: {
-        blocks: BlockProps[],
-        // asyncBlocks: (action: string, block: BlockProps | BlockProps[],obj?:any) => void
-    },
+    blocks: BlockProps[],
+    dragger?:{
+        dragStart:(e: React.DragEventHandler<HTMLDivElement>, comp: any) => void
+        dragEnd:() => void
+    }
+    // doBlocks: (action: string, block: BlockProps | BlockProps[]) => void
     // apiConifg: {
     //     api?: 'static' | 'dynamic',
     //     data?: any,
@@ -61,7 +61,7 @@ export interface Engine {
     //     },
     //     setApiData: (values: { [key: string]: any }, focus: Map<string, BlockProps>) => void
     // },
-    property?: any
+
 }
 
 interface EngineCanvas {
@@ -70,20 +70,23 @@ interface EngineCanvas {
     data: {
         container: any,
         blocks: BlockProps[]
-    }
+    },
+    canvasRef:React.MutableRefObject<any>
 }
 export const EngineContext = createContext<Engine>({
     container: {
         container: null,
         onContainerEdit: (params: string, value: any) => { },
     },
-    blocks: {
-        blocks: [],
-        // asyncBlocks: (action: string, block: BlockProps | BlockProps[]) => { }
-    },
+    blocks: [],
+    // dragger:{
+    //     dragStart: () => {},
+    //      dragEnd: () => {},
+    // }
     // apiConifg: {
     //     setApiData: (values: { [key: string]: any }, focus: Map<string, BlockProps>) => { }
     // }
+    // doBlocks: (action: string, block: BlockProps | BlockProps[]) => { }
 })
 
 
@@ -92,17 +95,35 @@ const EngineProvider = (props: EngineCanvas) => {
     // 父容器相关(画布)
     const [container, onContainerEdit] = useContainer(props.data.container)
     // sync blocks 
-    const { blocks } = props.data
+    const [dragStart, dragEnd, block] = useDragMenus(props.canvasRef)
+    // moving Blocks
+    const [] = useBlockMoving
+    const [blocks, asyncBlocks] = useBlocksSync(props.data.blocks)
+    useEffect(() => {
+        if (block.id) {
+            asyncBlocks('add', block)
+        }
+    },[block])
+
+    useEffect(() => {
+        EngineStore.blocks = blocks
+    },[blocks])
 
     const EngineStore = useLocalObservable((): Engine => {
         return {
-            blocks: {
-                blocks,
-            },
+            blocks,
             container: {
                 container,
                 onContainerEdit
             },
+            dragger:{
+                dragStart, 
+                dragEnd,
+            },
+            moving:{
+                handleMoving
+            }
+            // doBlocks:asyncBlocks,
             // property: {
             //     setProperty: (values: { [key: string]: any }, focus: Map<string, BlockProps>) => {
 
@@ -117,22 +138,9 @@ const EngineProvider = (props: EngineCanvas) => {
     // console.log(EngineStore.dragger.)
     return (
         <EngineContext.Provider value={EngineStore}>
-            <CanvasProvider blocks={blocks}>
                 {props.children}
-            </CanvasProvider>
-
         </EngineContext.Provider>
     )
 }
 
 export default observer(EngineProvider)
-
-
-// export const dragStart = () => {
-
-
-// }
-
-// export const dragEnd = () => {
-
-// }

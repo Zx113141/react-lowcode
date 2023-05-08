@@ -16,19 +16,19 @@ export const CanvasContext = createContext<any>(null)
 interface CanvasProps {
     // canvasRef: React.MutableRefObject<any>,
     children: ReactNode,
-    blocks: BlockProps[]
+    blocks: BlockProps[],
+    canvasRef:React.MutableRefObject<any>
 }
 
 const CanvasProvider = (props: CanvasProps) => {
     // do DraggerEnd, Moving, Focus
     // const { canvasRef } = props
-    // const [dragStart, dragEnd, block] = useDragMenus(canvasRef)
+    const [dragStart, dragEnd, block] = useDragMenus(props.canvasRef)
     const focusBlock: BlockProps | null = null
     // useEffect(() => {
-    //     canvasStore.focusBlock = block
+    //     canvasStore.focusBlock = block postMessage()
     // },[block])
     const canvasStore = useLocalObservable(() => {
-
 
         return {
             focusBlock,
@@ -41,7 +41,7 @@ const CanvasProvider = (props: CanvasProps) => {
             onBlockMoving: ({ x, y }: { x: number, y: number }) => {
 
 
-            }
+            },
         }
     })
 
