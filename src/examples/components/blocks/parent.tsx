@@ -1,16 +1,15 @@
-import React from "react"
+import React, { forwardRef } from "react"
 import Blocks from '.'
 import styles from './index.module.less'
 
 interface CanvasContentProps {
     container:any,
-    ref:React.MutableRefObject<any>,
     dragEnd:() => void
 }
 
-const CanvasContent = (props:CanvasContentProps) => {
+const CanvasContent = forwardRef((props:CanvasContentProps,ref:any) => {
 
-    const {container, dragEnd, ref} = props
+    const {container, dragEnd} = props
 
     return (
         <div className={styles.canvasContentScroll}
@@ -23,6 +22,6 @@ const CanvasContent = (props:CanvasContentProps) => {
             ></Blocks>
         </div>
     )
-}
+})
 
 export default CanvasContent

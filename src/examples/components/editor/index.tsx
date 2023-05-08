@@ -37,29 +37,30 @@ const Editor = (props: EditorProps) => {
         canvasRef
     })
 
-
     return (
         <EditConfigProvier>
             <DataProvider widgetList={widgetList}>
                 <Nav></Nav>
-                <ContainerPc>
-                    <EngineProvider data={data}>
-                        <Menu
+                <EngineProvider data={data}>
+                    <ContainerPc
+                        menu={<Menu
                             onCollapse={() => changeCollapse()}
                             items={widgetList}
                             dragStart={dragStart}
-                        ></Menu>
-                        <EditorContent
-                            dragEnd={dragEnd}
-                            onFocus={null}
-                        ></EditorContent>
-                        <ConfigurationsContent 
-                            panel={() => <div></div>}
-                            onWatch={null}
+                        ></Menu>}
+                        dragEnd={dragEnd}
+                        onFocus={null}
+                        canvasRef={canvasRef}
+                        configure={
+                            <ConfigurationsContent
+                                panel={() => <div></div>}
+                                onWatch={null}
 
-                        ></ConfigurationsContent>
-                    </EngineProvider>
-                </ContainerPc>
+                            ></ConfigurationsContent>
+                        }
+                    ></ContainerPc>
+
+                </EngineProvider>
             </DataProvider>
 
         </EditConfigProvier>

@@ -1,19 +1,38 @@
 
 import styles from './index.module.less'
-
-interface EditorProps {
-    children: React.ReactNode,
+import { useImperativeHandle, useContext, useRef, ReactNode } from 'react'
+// import styles from './index.module.less'
+import CanvasContent from '../blocks/parent'
+import { Engine, EngineContext } from '@/examples/Provider/Engine'
+interface CanvasProps {
+    dragEnd: () => void,
+    onFocus: any
+    canvaRef: React.MutableRefObject<any>
+    configure: ReactNode
+    menu: ReactNode
 }
 
-const ContainerPc = (props: EditorProps) => {
-    const { children } = props
-    // console.log('ContainerPc 渲染了')
+
+const ContainerPc = (props: CanvasProps) => {
+    const { dragEnd, configure, menu } = props
+    const ref = useRef() as React.MutableRefObject<any>
+    // engine 
+    const { container } = useContext<Engine>(EngineContext)
     return (
         <div className={styles.container}>
             {
-                children
+                menu
             }
-            
+            <div className={styles.canvas}>
+                <div className={styles.canvasContent}>
+                    <CanvasContent container={container} dragEnd={dragEnd} ref={ref}></CanvasContent>
+                </div>
+
+
+            </div>
+            {
+                configure
+            }
         </div>
     )
 }

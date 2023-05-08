@@ -31,14 +31,14 @@ export const useDragMenus = (ref: any):
         //     id: String(new Date().getTime()),
         //     ...current,
         // })
-
+        console.log('放置成功')
         current = null
     }
     const dragLeave = (e: React.DragEventHandler<HTMLDivElement>) => {
-        e.dataTransfer.dropEffect = 'none'
+        // e.dataTransfer.dropEffect = 'none'
     }
     const dragEnter = (e: React.DragEventHandler<HTMLDivElement>) => {
-        e.dataTransfer.dropEffect = 'move'
+        // e.dataTransfer.dropEffect = 'move'
     }
     const dragEnd = useCallback(() => {
         ref.current?.removeEventListener('dragenter', dragEnter)
