@@ -11,7 +11,7 @@
 // import somethings
 
 import { useDragMenus } from "../hooks/useDragMenus"
-import {useContext} from 'react'
+import { useContext } from 'react'
 import { type BlockProps, EngineContext, type Engine } from '@/examples/Provider/Engine';
 
 
@@ -20,11 +20,18 @@ interface canvas {
     // blocks:BlockProps[]
 }
 
-// export const createDragRef = (props: canvas) => {
-
-//     // doBlocks('add', block)
-//     return {
-//         dragStart,
-//         dragEnd
-//     }
-// }
+export const createDragRef = (props: canvas) => {
+    // sync blocks 
+    const { canvasRef } = props
+    const [dragStart, dragEnd, block] = useDragMenus(canvasRef)
+    // const { setInitialValue } = useContext(EngineContext)
+    // console.log(111)
+    // setInitialValue(data)
+    // // doBlocks('add', block)
+    // // debugger
+    return {
+        dragStart,
+        dragEnd,
+        block
+    }
+}

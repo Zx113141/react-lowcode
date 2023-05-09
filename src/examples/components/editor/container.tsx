@@ -9,13 +9,14 @@ interface CanvasProps {
     configure: ReactNode
     menu: ReactNode
     blocks: ReactNode
+    dragEnd: () => void
 }
 
 
 const ContainerPc = forwardRef((props: CanvasProps, ref: any) => {
-    const {  configure, menu ,blocks} = props
+    const { configure, menu, blocks, dragEnd } = props
     // engine 
-    const { container ,dragger} = useContext<Engine>(EngineContext)
+    const { container } = useContext<Engine>(EngineContext)
     console.log('container 渲染了')
     return (
         <div className={styles.container}>
@@ -25,8 +26,8 @@ const ContainerPc = forwardRef((props: CanvasProps, ref: any) => {
                     <div className={styles.canvasContentScroll}
                         style={{ ...container.container }}
                         ref={ref}
-                        onDragEnd={() => dragger?.dragEnd()}
-                    // onMouseDown={() => focus.clearFocus()}
+                        onDragEnd={() => dragEnd()}
+                        onMouseDown={() => dragEnd()}
                     >
                         {blocks}
                     </div>

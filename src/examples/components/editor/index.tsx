@@ -8,7 +8,7 @@ import ConfigurationsContent from "../configuration"
 import Nav from "@/examples/components/nav"
 import { type Items } from "@/examples/components/menu"
 import EngineProvider from '@/examples/Provider/Engine'
-// import { createDragRef } from "@/examples/core"
+import { createDragRef } from "@/examples/core"
 import EditConfigProvier from '@/examples/Provider/Editor'
 import DataProvider from "@/examples/Provider/Blocks"
 import Blocks from '../blocks'
@@ -37,18 +37,24 @@ const Editor = (props: EditorProps) => {
 
 
     // throw somethings from Engine/core
+    const { dragStart, dragEnd, block } = createDragRef({
+        canvasRef,
+    })
+
     return (
         <EditConfigProvier>
             <DataProvider widgetList={widgetList}>
                 <Nav></Nav>
-                <EngineProvider data={data} canvasRef={canvasRef}>
+                <EngineProvider configs={null} block={block} data={data}>
                     <ContainerPc
                         menu={
                             <Menu
                                 onCollapse={() => changeCollapse()}
                                 items={widgetList}
+                                dragStart={dragStart}
                             ></Menu>
                         }
+                        dragEnd={dragEnd}
                         blocks={<Blocks></Blocks>}
                         ref={canvasRef}
                         configure={

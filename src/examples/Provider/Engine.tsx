@@ -43,10 +43,10 @@ export interface Engine {
         onContainerEdit: (params: string, value: any) => void,
     },
     blocks: BlockProps[],
-    dragger?:{
-        dragStart:(e: React.DragEventHandler<HTMLDivElement>, comp: any) => void
-        dragEnd:() => void
-    }
+    // dragger?:{
+    //     dragStart:(e: React.DragEventHandler<HTMLDivElement>, comp: any) => void
+    //     dragEnd:() => void
+    // }
     // doBlocks: (action: string, block: BlockProps | BlockProps[]) => void
     // apiConifg: {
     //     api?: 'static' | 'dynamic',
@@ -66,12 +66,14 @@ export interface Engine {
 
 interface EngineCanvas {
     children: React.ReactNode,
+    configs: null
+    block: BlockProps | undefined
     // canvasRef: React.MutableRefObject<any>,
     data: {
         container: any,
         blocks: BlockProps[]
     },
-    canvasRef:React.MutableRefObject<any>
+    // canvasRef:React.MutableRefObject<any>
 }
 export const EngineContext = createContext<Engine>({
     container: {
@@ -79,35 +81,26 @@ export const EngineContext = createContext<Engine>({
         onContainerEdit: (params: string, value: any) => { },
     },
     blocks: [],
-    // dragger:{
-    //     dragStart: () => {},
-    //      dragEnd: () => {},
-    // }
-    // apiConifg: {
-    //     setApiData: (values: { [key: string]: any }, focus: Map<string, BlockProps>) => { }
-    // }
-    // doBlocks: (action: string, block: BlockProps | BlockProps[]) => { }
 })
 
 
 const EngineProvider = (props: EngineCanvas) => {
-    // const { canvasRef } = props
+    const { block, data } = props
     // 父容器相关(画布)
-    const [container, onContainerEdit] = useContainer(props.data.container)
-    // sync blocks 
-    const [dragStart, dragEnd, block] = useDragMenus(props.canvasRef)
-    // moving Blocks
-    const [] = useBlockMoving
-    const [blocks, asyncBlocks] = useBlocksSync(props.data.blocks)
+    const [container, onContainerEdit] = useContainer(data.container)
+    // edit Blocks
+    const [blocks, asyncBlocks] = useBlocksSync(data.blocks)
+    // focus blocks
+
     useEffect(() => {
-        if (block.id) {
+        if (block && block.id) {
             asyncBlocks('add', block)
         }
-    },[block])
+    }, [block])
 
     useEffect(() => {
         EngineStore.blocks = blocks
-    },[blocks])
+    }, [blocks])
 
     const EngineStore = useLocalObservable((): Engine => {
         return {
@@ -116,29 +109,12 @@ const EngineProvider = (props: EngineCanvas) => {
                 container,
                 onContainerEdit
             },
-            dragger:{
-                dragStart, 
-                dragEnd,
-            },
-            moving:{
-                handleMoving
-            }
-            // doBlocks:asyncBlocks,
-            // property: {
-            //     setProperty: (values: { [key: string]: any }, focus: Map<string, BlockProps>) => {
-
-            //     }
-            // },
-            // apiConifg: {
-            //     setApiData: (values: { [key: string]: any }, focus: Map<string, BlockProps>) => {
-            //     }
-            // }
         }
     })
     // console.log(EngineStore.dragger.)
     return (
         <EngineContext.Provider value={EngineStore}>
-                {props.children}
+            {props.children}
         </EngineContext.Provider>
     )
 }

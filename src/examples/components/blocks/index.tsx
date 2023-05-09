@@ -16,7 +16,6 @@ const Blocks = (props: BlocksProps) => {
 
     // 移动， 焦点， 移动倍数
     const { scale } = container.container
-    // const { getFocus, focusInfo } = focus
 
     return (
         <>
@@ -26,7 +25,7 @@ const Blocks = (props: BlocksProps) => {
                     return (
                         <div key={block.id}
                             className={classNames(styles.block,
-                                //  focusInfo.has(block.id) ? styles.blockFocus : ''
+                                block.focus ? styles.blockFocus : ''
                                  )}
                             style={{ ...block.style }}
                             // onMouseDown={(event: React.MouseEvent<HTMLDivElement>) => getFocus(event, block,scale)}
