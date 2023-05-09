@@ -1,6 +1,6 @@
 
 
-import React, { useCallback } from "react";
+import React  from "react";
 import { BlockProps } from '../Provider/Engine';
 
 export type path = 'property' | 'data' | 'events'
@@ -23,11 +23,11 @@ export const useBlocksSync = (defaultValue: BlockProps[]): [BlockProps[], (actio
                 lockingBlocks()
                 break;
             default:
-                throw Error('actions is not a valid type')
+                throw Error(`${path[0]} action is not a valid type`)
         }
     }, [blocks])
 
-    const addBlocks = useCallback((block: BlockProps) => {
+    const addBlocks = React.useCallback((block: BlockProps) => {
         console.log('add block')
         setBlocks([...blocks, block])
     }, [blocks])
